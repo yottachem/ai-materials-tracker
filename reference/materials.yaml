@@ -28,11 +28,11 @@ materials:
     value: 0.45 V (not iR-corrected); stayed below 0.5 V over 1,000 h. PdOx failed at ~200 h, NiTaPdOx at ~470 h
     source: https://arxiv.org/abs/2609.30133
   benchmark:
-    material: Commercial IrO2
-    value: 0.336 V at 10 mA/cm2 (different lab and conditions)
-    source: https://pmc.ncbi.nlm.nih.gov/articles/PMC13502665/
-    basis: literature
-    gap: About 0.1 V more overpotential than commercial IrO2, with no iridium
+    material: RuOx on the same platform
+    value: 0.41 V at 10 mA/cm2 (not iR-corrected); RuOx kept 59% of its Ru after 661 h vs 96% Pd for InMnPdOx after 1,000 h
+    source: https://arxiv.org/abs/2609.30133
+    basis: head-to-head
+    gap: 40 mV more overpotential than RuOx, with no Ru or Ir and far better metal retention
     tradeoffs: Palladium is itself a platinum-group metal; humans moved samples between tools
   ai_role: AI-guided, human-supervised closed loop (>90% automated); 2,942 catalysts across 53 systems and 26 elements
   evidence: preprint
@@ -40,7 +40,7 @@ materials:
   publication: {id: "arXiv:2609.30133", url: "https://arxiv.org/abs/2609.30133", title: "AI-guided high-throughput discovery of iridium- and ruthenium-free palladium-oxide catalysts for durable acidic oxygen evolution", date: 2026-09-24}
   sources: ["https://cen.acs.org/business/start-ups/lila-ai-hydrogen-catalyst-electrolyzer/104/web/2026/10"]
   verified: 2026-11-19
-  verify: [orgs, benchmark.value]   # affiliation block unread (PDF too large); look for an IrO2 control in the paper
+  verify: []
 
 - id: atinary-cuzncezro2
   name: Cu-Zn-Ce on ZrO2 methanol catalyst
@@ -65,7 +65,7 @@ materials:
   publication: {id: "doi:10.1016/j.checat.2023.100888", url: "https://doi.org/10.1016/j.checat.2023.100888", title: "Accelerated exploration of heterogeneous CO2 hydrogenation catalysts by Bayesian-optimized high-throughput and automated experimentation", date: 2024}
   sources: ["https://atinary.com/use-cases/ethzurich/", "https://www.nature.com/articles/s41929-024-01124-5"]
   verified: 2026-11-19
-  verify: [benchmark.value]   # paper full text for the commercial comparison
+  verify: []
 
 - id: meta-amrize-concrete
   name: AI-optimized low-carbon concrete mix (Rosemount, MN)
@@ -87,10 +87,10 @@ materials:
   ai_role: Bayesian optimization of the mix recipe (BOxCrete, open model on 500+ strength measurements from 123 mixes)
   evidence: preprint
   stage: deployed
-  publication: {id: "arXiv:2603.21525", url: "https://arxiv.org/abs/2603.21525", title: "BOxCrete", date: 2026}
+  publication: {id: "arXiv:2603.21525", url: "https://arxiv.org/abs/2603.21525", title: "BOxCrete: A Bayesian Optimization Open-Source AI Model for Concrete Strength Forecasting and Mix Optimization", date: 2026}
   sources: ["https://engineering.fb.com/2026/03/30/data-center-engineering/ai-for-american-produced-cement-and-concrete/", "https://www.amrize.com/us/en/newsroom/concrete--now-with-ai--see-how-at-the-new-meta-data-center", "https://cee.illinois.edu/news/Garg-Meta-Amrize-project-of-the-year"]
   verified: 2026-11-19
-  verify: [publication.title]
+  verify: []
 
 - id: pnnl-naxli3-xycl6
   name: NaxLi3-xYCl6 solid electrolyte series
@@ -112,10 +112,10 @@ materials:
   ai_role: ML + cloud HPC screening, 32.6M candidates to 18
   evidence: peer-reviewed
   stage: lab
-  publication: {id: "doi:10.1021/jacs.4c03849", url: "https://doi.org/10.1021/jacs.4c03849", title: "Accelerating Computational Materials Discovery with Machine Learning and Cloud High-Performance Computing", date: 2024-07-09}
+  publication: {id: "doi:10.1021/jacs.4c03849", url: "https://doi.org/10.1021/jacs.4c03849", title: "Accelerating Computational Materials Discovery with Machine Learning and Cloud High-Performance Computing: from Large-Scale Screening to Experimental Validation", date: 2024-07-09}
   sources: ["https://www.pnnl.gov/publications/accelerating-computational-materials-discovery-machine-learning-and-cloud-high"]
   verified: 2026-11-19
-  verify: [key_property.value]   # arXiv v1 values; JACS version unread
+  verify: []
 
 - id: mattergen-tacr2o6
   name: TaCr2O6
@@ -141,7 +141,7 @@ materials:
   dispute: {status: disputed, critique: "https://pubs.rsc.org/en/content/articlelanding/2026/mh/d6mh00268d", summary: "Mater. Horiz. 2026 argues the phase was already in the training data"}
   sources: []
   verified: 2026-11-19
-  verify: [publication.id]
+  verify: []
 
 - id: gnome-crystals
   name: GNoME predicted stable crystals
@@ -166,7 +166,7 @@ materials:
   publication: {id: "doi:10.1038/s41586-023-06735-9", url: "https://doi.org/10.1038/s41586-023-06735-9", title: "Scaling deep learning for materials discovery", date: 2023}
   sources: []
   verified: 2026-11-19
-  verify: [publication.id]
+  verify: []
 
 - id: harvard-samsung-tadf
   name: Blue TADF OLED emitters (1.6M-molecule screen)
@@ -181,7 +181,7 @@ materials:
   benchmark:
     material: Best light-blue TADF emitter reported in 2016
     value: 25% EQE
-    source: https://pubs.rsc.org/lt/content/articlelanding/2016/tc/c5tc04057d/unauth
+    source: https://doi.org/10.1039/C5TC04057D
     basis: literature
     gap: Competitive with the 2016 best (22% vs 25%), not a record; deep-blue TADF has since reached 33.5% (2021)
     tradeoffs: ""
@@ -191,7 +191,7 @@ materials:
   publication: {id: "doi:10.1038/nmat4717", url: "https://doi.org/10.1038/nmat4717", title: "Design of efficient molecular organic light-emitting diodes by a high-throughput virtual screening and experimental approach", date: 2016}
   sources: ["https://www.nature.com/articles/s41566-021-00763-5.pdf"]
   verified: 2026-11-19
-  verify: [benchmark.source]
+  verify: []
 
 - id: liverpool-photocatalyst
   name: Photocatalyst mixture for hydrogen from water
@@ -202,7 +202,7 @@ materials:
   key_property:
     name: Hydrogen evolution activity
     value: 6x the initial formulations
-    source: https://livrepository.liverpool.ac.uk/3095139/
+    source: https://doi.org/10.1038/s41586-020-2442-2
   benchmark:
     material: Initial formulations of the campaign
     value: ""
@@ -216,7 +216,7 @@ materials:
   publication: {id: "doi:10.1038/s41586-020-2442-2", url: "https://doi.org/10.1038/s41586-020-2442-2", title: "A mobile robotic chemist", date: 2020}
   sources: []
   verified: 2026-11-19
-  verify: [key_property.value]   # absolute H2 rate and base polymer in the gated paper
+  verify: []
 
 - id: argonne-pedot-pss
   name: PEDOT:PSS conductive films (Polybot)
@@ -227,13 +227,13 @@ materials:
   key_property:
     name: Electrical conductivity
     value: Above 4,500 S/cm averaged, with full film coverage
-    source: https://www.anl.gov/article/selfdriving-lab-transforms-materials-discovery
+    source: https://doi.org/10.1038/s41467-024-55655-3
   benchmark:
-    material: H2SO4-treated PEDOT:PSS films
-    value: Above 4,000 S/cm
-    source: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7694649/
+    material: H2SO4-treated PEDOT:PSS nanofibrils (Kim et al. 2014)
+    value: 4,380 S/cm
+    source: https://doi.org/10.1002/adma.201304611
     basis: literature
-    gap: Comparable to the best acid-treated films, not a record; the gain is low defects at that conductivity
+    gap: Comparable to the best acid-treated films (4,500 vs 4,380 S/cm), not a record; the gain is low defects at that conductivity
     tradeoffs: ""
   ai_role: Importance-guided Bayesian optimization of processing
   evidence: peer-reviewed
@@ -241,7 +241,7 @@ materials:
   publication: {id: "doi:10.1038/s41467-024-55655-3", url: "https://doi.org/10.1038/s41467-024-55655-3", title: "Autonomous platform for solution processing of electronic polymers", date: 2025}
   sources: ["https://link.springer.com/content/pdf/10.1557/s43577-025-00980-1.pdf"]
   verified: 2026-11-19
-  verify: [key_property.value, benchmark.source]   # paper gated; 4,500 S/cm from the Argonne article
+  verify: []
 
 - id: toronto-nicocr-alloys
   name: 3D-printable NiCoCr alloys (36Ni-14Co-50Cr; 12Ni-62Co-26Cr)
@@ -266,7 +266,7 @@ materials:
   publication: {id: "doi:10.1038/s44334-026-00098-5", url: "https://doi.org/10.1038/s44334-026-00098-5", title: "Active learning for the accelerated discovery of complex concentrated NiCoCr alloys in additive manufacturing", date: 2026}
   sources: ["https://www.researchgate.net/publication/407554471_Active_learning_for_the_accelerated_discovery_of_complex_concentrated_NiCoCr_alloys_in_additive_manufacturing"]
   verified: 2026-11-19
-  verify: [key_property.value]   # figures from the U of T release; paper paywalled
+  verify: []
 
 - id: ncstate-double-perovskite
   name: Lead-free double perovskite nanoplatelets (PoLARIS)
@@ -275,23 +275,23 @@ materials:
   application: Lead-free light emitters
   what_is_new: Up to six-element nanoplatelets found in one 12 h, 120-experiment campaign
   key_property:
-    name: Brightness (photoluminescence)
-    value: Not quantified in the release; "best-in-class"
-    source: https://www.eurekalert.org/news-releases/1126928
+    name: Absolute photoluminescence quantum yield (PLQY)
+    value: 45% purified (28% crude solution), champion nanoplatelets
+    source: https://doi.org/10.1038/s41467-026-72765-2
   benchmark:
     material: Bi-doped Cs2AgxNa1-xInCl6 nanoplatelets (near-unity PLQY, 2023)
     value: Near-unity PLQY
     source: https://pubmed.ncbi.nlm.nih.gov/37756015/
-    basis: none-stated
-    gap: The release claims best-in-class without a number; the field already has near-unity PLQY lead-free nanoplatelets
+    basis: literature
+    gap: Well below the near-unity 2023 result the paper itself cites; the release's "best-in-class" is not quantified in the paper
     tradeoffs: ""
   ai_role: Autonomous microfluidic optimization
   evidence: peer-reviewed
   stage: lab
-  publication: {id: "doi:10.1038/s41467-026-72765-2", url: "https://doi.org/10.1038/s41467-026-72765-2", title: "Autonomous microfluidic experimentation for exploring reaction interference and synthesizing double perovskite nanoplatelets", date: 2026-05-04}
+  publication: {id: "doi:10.1038/s41467-026-72765-2", url: "https://doi.org/10.1038/s41467-026-72765-2", title: "Autonomous microfluidic experimentation for exploring reaction inference and synthesizing double perovskite nanoplatelets", date: 2026-05-04}
   sources: ["https://news.ncsu.edu/2026/05/ai-powered-lab-discovers-brighter-lead-free-nanomaterials-in-12-hours/"]
   verified: 2026-11-19
-  verify: [key_property.value]   # PLQY and composition in the paper
+  verify: []
 
 - id: alab-inorganic-compounds
   name: A-Lab synthesized inorganic compounds
@@ -364,11 +364,11 @@ materials:
     tradeoffs: ""
   ai_role: AI used "to optimize the processing and production"
   evidence: company-reported
-  stage: deployed
+  stage: customer-tested
   sources: ["https://www.prnewswire.com/news-releases/cambium-launches-new-high-temperature-resin-system-for-aerospace-manufacturers-that-reduces-hypersonic-parts-fabrication-by-70-80-302438000.html"]
   notes: Not marked bio; no source says ApexShield is bio-derived
   verified: 2026-11-19
-  verify: [stage]   # commercial launch confirmed; parts in service not confirmed
+  verify: []
 
 - id: ses-ai-electrolyte
   name: Molecular Universe electrolyte (2170 cell)
@@ -389,10 +389,10 @@ materials:
     tradeoffs: ""
   ai_role: ML screening of molecules
   evidence: company-reported
-  stage: customer-tested
+  stage: lab
   sources: []
   verified: 2026-11-19
-  verify: [stage]
+  verify: []
 
 - id: kyulux-hyperfluorescence
   name: Hyperfluorescence TADF materials (Kyumatic program)
@@ -471,15 +471,15 @@ materials:
   material_class: bio
   bio: true
   application: Converting abundant Reb A into scarce, sugar-like Reb M
-  what_is_new: Designed enzymes make Reb M (under 1% of the stevia leaf) from Reb A; more than 10 t produced
+  what_is_new: Designed enzymes make Reb M (a minor leaf glycoside) from Reb A; more than 10 t produced
   key_property:
     name: Purity and scale
     value: 95%+ purity target; >10 t produced
     source: https://foodbusinessnews.net/articles/27237-cost-effective-reb-m-sweetener-hits-10-ton-production-level
   benchmark:
     material: Reb M extracted from stevia leaf
-    value: Under 1% of leaf steviol glycosides (extraction impractical)
-    source: https://www.prnewswire.com/news-releases/arzedas-new-portfolio-of-prosweet-enzymes-unlocks-the-potential-of-stevia-by-efficiently-producing-reb-d-and-m-from-stevia-leaf-extract-301771536.html
+    value: A minor leaf glycoside; no share stated
+    source: https://doi.org/10.3390/foods3010162
     basis: none-stated
     gap: Cost advantage claimed, not quantified
     tradeoffs: ""
@@ -488,7 +488,7 @@ materials:
   stage: deployed
   sources: ["https://www.businesswire.com/news/home/20241107936695/en/"]
   verified: 2026-11-19
-  verify: [benchmark.source]   # "<1%" figure is from a USPTO patent document, not Arzeda
+  verify: []
 
 - id: chemix-cells
   name: AI-designed Li-ion cells and electrolytes
@@ -574,11 +574,11 @@ materials:
   key_property:
     name: Mass change in a 1-minute torch test
     value: +0.25% mass
-    source: https://latent.space/wiki/radical-ai-bb801311/
+    source: https://www.radical-ai.com/news/purdue-applied-research-institute-confirms-superior-performance-of-radical-ai-materials
   benchmark:
     material: C103 niobium alloy
     value: 32% mass loss
-    source: https://latent.space/wiki/radical-ai-bb801311/
+    source: https://www.radical-ai.com/news/purdue-applied-research-institute-confirms-superior-performance-of-radical-ai-materials
     basis: head-to-head
     gap: Essentially no mass loss vs 32% for C103 (company-reported)
     tradeoffs: ""
@@ -587,7 +587,7 @@ materials:
   stage: lab
   sources: ["https://www.rdworldonline.com/how-radical-ai-is-building-a-self-driving-materials-lab/"]
   verified: 2026-11-19
-  verify: [key_property.source]   # find a company or Purdue primary source
+  verify: []
 
 - id: materials-nexus-magnex
   name: MagNex rare-earth-free magnet

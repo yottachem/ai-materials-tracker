@@ -40,3 +40,13 @@ def test_rules_catch_errors():
 @pytest.mark.skipif(not os.environ.get("LAUNCH_GATE"), reason="launch gate runs with LAUNCH_GATE=1")
 def test_launch_gate():
     assert registry.launch_problems() == []
+
+
+def test_chart_plots_tier1_only():
+    """Option A (2026-11-19): aggregator-only funding is listed under the chart, never plotted."""
+    fx = [{"id": "a", "type": "company", "funding": {"low": 1, "high": 1, "tier": "tier1"}},
+          {"id": "b", "type": "company", "funding": {"low": 1, "high": 1, "tier": "aggregator"}},
+          {"id": "c", "type": "lab", "funding": {"low": 1, "high": 1, "tier": "tier1"}},
+          {"id": "d", "type": "company"}]
+    assert [o["id"] for o in registry.chart_orgs(fx)] == ["a"]
+    assert [o["id"] for o in registry.unconfirmed_funding_orgs(fx)] == ["b"]

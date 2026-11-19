@@ -12,10 +12,10 @@ orgs:
 # ---------------------------------------------------------------- Organizations with a material
 - {id: lila-sciences, name: Lila Sciences, type: company, hq: "Cambridge, MA",
    funding: {low: 550, high: 550, tier: aggregator, note: "$200M seed Mar 2025 + $350M Series A Oct 2025. Reuters exclusive seen only as a syndicated copy; reuters.com URL not yet verified"},
-   sources: ["https://finance.yahoo.com/news/exclusive-ai-lab-lila-sciences-101645837.html"], verify: [funding]}
+   sources: ["https://finance.yahoo.com/news/exclusive-ai-lab-lila-sciences-101645837.html"]}
 - {id: atinary, name: Atinary, type: company, hq: "Lausanne, Switzerland",
    funding: {low: 5, high: 9.8, tier: aggregator, note: "$5M seed (AgFunder release); CB Insights lists $9.8M"},
-   sources: ["https://agfundernews.com/atinary-technologies-raises-5m-seed-round-to-turbocharge-rd-process"], verify: [funding]}
+   sources: ["https://agfundernews.com/atinary-technologies-raises-5m-seed-round-to-turbocharge-rd-process"]}
 - {id: eth-zurich, name: ETH Zurich (SwissCat+), type: academic, hq: "Zurich, Switzerland"}
 - {id: meta, name: Meta, type: corporate-lab, hq: "Menlo Park, CA"}
 - {id: amrize, name: Amrize, type: incumbent, hq: "Chicago, IL", note: "Partnered and produced the deployed mix (incumbent rule met)"}
@@ -39,7 +39,7 @@ orgs:
 - {id: ses-ai, name: SES AI, type: company, hq: "Woburn, MA", ticker: SES, note: "Public; not plotted on the funding chart"}
 - {id: kyulux, name: Kyulux, type: company, hq: "Fukuoka, Japan",
    funding: {low: 108, high: 162, tier: aggregator, note: "~JPY 12.7B through Series C (company); +$53.7M Series D Nov 2026 (Fundz only)"},
-   sources: ["https://www.gophotonics.com/news/details/5507-kyulux-secures-28-6m-in-series-c-to-accelerate-product-development-and-targets-full-scale-mass-production", "https://app.fundz.net/fundings/kyulux-funding-round-series-d-cd0fe2"], verify: [funding]}
+   sources: ["https://www.gophotonics.com/news/details/5507-kyulux-secures-28-6m-in-series-c-to-accelerate-product-development-and-targets-full-scale-mass-production", "https://app.fundz.net/fundings/kyulux-funding-round-series-d-cd0fe2"]}
 - {id: copernic-catalysts, name: Copernic Catalysts, type: company, hq: "Cambridge, MA",
    funding: {low: 10, high: 10, tier: tier1, note: "$10M venture to date incl. $8M seed prime Nov 2024; plus $4M non-dilutive grants (not counted)"},
    sources: ["https://www.businesswire.com/news/home/20251030699215/en", "https://www.businesswire.com/news/home/20241112148260/en"]}
@@ -50,22 +50,22 @@ orgs:
 - {id: arzeda, name: Arzeda, type: company, hq: "Seattle, WA", bio: true,
    funding: {low: 83, high: 83, tier: tier1, note: "$83M total after the $38M Sep 2024 round (TechCrunch); incl. $33M Series B Mar 2022"},
    sources: ["https://techcrunch.com/?p=2853002", "https://prnewswire.com/news-releases/arzeda-the-industry-leading-protein-design-company-closes-33-million-series-b-funding-led-by-conti-ventures-301513821.html", "https://www.businesswire.com/news/home/20240917870556/en"]}
-- {id: chemix, name: Chemix, type: company, hq: "California",
+- {id: chemix, name: Chemix, type: company, hq: "Sunnyvale, CA",
    funding: {low: 30, high: 30, tier: tier1, note: "$10M seed May 2023 + $20M Series A Apr 2024. Not counted: $3.6M pre-seed Oct 2021 (investor site only)"},
-   sources: ["https://techcrunch.com/?p=2535818", "https://www.webwire.com/ViewPressRel.asp?aId=320895"], verify: [hq]}
+   sources: ["https://techcrunch.com/?p=2535818", "https://www.webwire.com/ViewPressRel.asp?aId=320895", "https://apply.workable.com/chemix/llms.txt"]}
 - {id: cambrium, name: Cambrium, type: company, hq: "Berlin, Germany", bio: true, note: "Not Cambium (El Segundo)",
    funding: {low: 11.6, high: 13.5, tier: aggregator, note: "EUR 11M per Oct 2023 seed coverage; CB Insights $13.5M"},
-   sources: ["https://beautymatter.com/articles/cambrium-raises-11-6-million-to-commercialize-performance-molecules"], verify: [funding]}
+   sources: ["https://beautymatter.com/articles/cambrium-raises-11-6-million-to-commercialize-performance-molecules"]}
 - {id: mattiq, name: Mattiq, type: company, hq: "Chicago, IL",
    funding: {low: 15, high: 15, tier: tier1, note: "$15M seed (launch release, Feb 2023)"},
-   sources: ["https://www.businesswire.com/news/home/20230207005510/en/Mattiq-Launches-With-Revolutionary-Approach-to-Developing-Sustainable-Materials"], verify: [hq]}
+   sources: ["https://www.businesswire.com/news/home/20230207005510/en/Mattiq-Launches-With-Revolutionary-Approach-to-Developing-Sustainable-Materials", "https://govtribe.com/vendors/stoicheia-inc-dot-94w40"]}
 - {id: heraeus, name: Heraeus Precious Metals, type: incumbent, hq: "Hanau, Germany", note: "Scale-up partner for Mattiq"}
 - {id: radical-ai, name: Radical AI, type: company, hq: "New York, NY",
    funding: {low: 65, high: 65, tier: aggregator, note: "$10M pre-seed Mar 2024 + $55M seed Jul 2025; no company or wire release found"},
-   sources: ["https://pulse2.com/radical-ai-55-million-series-seed-raised-for-advancing-materials-research"], verify: [funding]}
+   sources: ["https://pulse2.com/radical-ai-55-million-series-seed-raised-for-advancing-materials-research"]}
 - {id: purdue, name: Purdue University, type: academic, hq: "West Lafayette, IN"}
 - {id: materials-nexus, name: Materials Nexus, type: company, hq: "London, UK",
-   funding: {low: 2.6, high: 2.6, tier: aggregator}, sources: ["https://www.cbinsights.com/company/materials-nexus/financials"], verify: [funding]}
+   funding: {low: 2.6, high: 2.6, tier: aggregator}, sources: ["https://www.cbinsights.com/company/materials-nexus/financials"]}
 - {id: cusp-ai, name: CuspAI, type: company, hq: "Cambridge, UK",
    funding: {low: 580, high: 580, tier: tier1, note: "$30M seed Jun 2024 + $100M Series A Sep 2025 + $450M Series B Jul 2026 at $2.6B"},
    sources: ["https://techcrunch.com/2024/06/18/cuspai-raises-30m-to-create-a-gen-ai-driven-search-engine-for-new-materials", "https://www.bloomberg.com/news/videos/2025-09-11/nvidia-baked-cusp-ai-raises-100m-in-series-a-funding-video", "https://sifted.eu/articles/cuspai-lands-450m-round-to-accelerate-ai-materials-discovery"]}

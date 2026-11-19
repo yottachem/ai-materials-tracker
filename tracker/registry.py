@@ -136,9 +136,16 @@ def problems(mats: list[dict] | None = None, org_list: list[dict] | None = None)
 
 
 def chart_orgs(org_list: list[dict] | None = None, mats: list[dict] | None = None) -> list[dict]:
-    """Venture-backed companies with funding: the funding vs evidence chart's points."""
+    """Venture-backed companies with tier-1 sourced funding: the funding vs evidence chart's points."""
     org_list = orgs() if org_list is None else org_list
-    return [o for o in org_list if o.get("type") == "company" and o.get("funding")]
+    return [o for o in org_list if o.get("type") == "company" and (o.get("funding") or {}).get("tier") == "tier1"]
+
+
+def unconfirmed_funding_orgs(org_list: list[dict] | None = None) -> list[dict]:
+    """Companies whose funding is aggregator-only: listed under the chart with figure and source, never plotted
+    (decision 2026-11-19, option A)."""
+    org_list = orgs() if org_list is None else org_list
+    return [o for o in org_list if o.get("type") == "company" and o.get("funding") and o["funding"].get("tier") != "tier1"]
 
 
 def launch_problems() -> list[str]:
