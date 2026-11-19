@@ -1,0 +1,240 @@
+# Signal config per organization: what the weekly ingest fetches. Keys are org ids from orgs.yaml.
+# Kept apart from orgs.yaml so the hand-curated registry carries no fetch settings.
+#
+# domains        org-owned web domains; a source on these counts as tier 1 (company announcement)
+# news           terms: exact phrases, every term fully quoted ('"Lila Sciences"'); a headline needs every phrase of one term.
+#                context: when present, one of these words must also appear (title or summary). exclude: same-name orgs.
+# newsroom_feed  the org's own RSS/Atom feed (primary source; news-term filter skipped)
+# cik            SEC filer id (Form D for private companies; 8-K/10-K for public)
+# openalex       institutions: OpenAlex institution ids (big institutions also need `query`)
+#                affiliations: phrases matched in the raw affiliation text (startups without an institution id)
+#                require: one of these must also appear in the matched affiliation text (same-name collisions)
+#                authors: OpenAlex author ids (named groups inside big institutions)
+#                query: title-and-abstract search applied to this org's works (default: none for startups and authors)
+# verify         fields still to confirm
+# Checked 2026-11-19: domains by fetch, CIKs by EDGAR search + submissions record, OpenAlex ids by API.
+
+signals:
+
+# ---------------------------------------------------------------- Organizations with a material
+  lila-sciences:
+    domains: [lila.ai]
+    news: {terms: ['"Lila Sciences"']}
+    openalex: {affiliations: ["Lila Sciences"]}
+  atinary:
+    domains: [atinary.com]
+    news: {terms: ['"Atinary"']}
+    newsroom_feed: https://atinary.com/feed/
+    openalex: {affiliations: ["Atinary"]}
+  meta:
+    news: {terms: ['"Meta" "concrete"', '"Meta" "Amrize"', '"BOxCrete"']}
+    openalex: {institutions: [I4210114444], query: '"concrete" OR "cement" OR "materials discovery" OR "catalyst"'}
+  amrize:
+    domains: [amrize.com]
+  microsoft:
+    news: {terms: ['"MatterGen"', '"MatterSim"', '"Azure Quantum Elements"', '"Microsoft Discovery"']}
+    openalex: {authors: [A5112667444, A5004926795], institutions: [I1290206253],
+               query: '("materials" OR "electrolyte" OR "catalyst" OR "coolant") AND ("synthesized" OR "experimental" OR "discovery")'}
+  pnnl:
+    news: {terms: ['"PNNL" "Microsoft"', '"Pacific Northwest National Laboratory" "Microsoft"']}
+    openalex: {institutions: [I142606810], query: '"Microsoft" AND ("electrolyte" OR "machine learning")'}
+  siat: {}
+  google-deepmind:
+    news: {terms: ['"GNoME"', '"DeepMind" "materials"'], exclude: ["Linux", "desktop"]}
+    openalex: {authors: [A5065360819]}
+  harvard: {}
+  samsung: {}
+  u-liverpool:
+    openalex: {authors: [A5060033823], query: '"robot" OR "autonomous" OR "machine learning" OR "Bayesian"'}
+  argonne:
+    news: {terms: ['"Polybot"'], context: [Argonne, polymer, film, films, electronic, materials]}
+    openalex: {authors: [A5033793189]}
+  u-toronto:
+    news: {terms: ['"Acceleration Consortium"']}
+    openalex: {authors: [A5067180501, A5071495561], query: '"machine learning" OR "active learning" OR "self-driving" OR "autonomous" OR "Bayesian"'}
+  nc-state:
+    news: {terms: ['"Abolhasani"']}
+    openalex: {authors: [A5087390873]}
+  berkeley-lab:
+    news: {terms: ['"A-Lab"'], context: [Berkeley, autonomous, materials]}
+    openalex: {authors: [A5014983956, A5037535334], query: '"autonomous" OR "A-Lab" OR "robotic" OR "self-driving"'}
+  eth-zurich: {}
+  orbital-industries:
+    domains: [orbitalindustries.com, orbitalmaterials.com]
+    news: {terms: ['"Orbital Materials"', '"Orbital Industries"']}
+    openalex: {affiliations: ["Orbital Materials", "Orbital Industries"]}
+  cambium:
+    domains: [cambiumglobal.com]
+    news: {terms: ['"Cambium"'], context: [ApexShield, "El Segundo", resin, aerospace, materials, composite],
+           exclude: ["Cambium Networks", "Cambium Learning", "Cambium Carbon", "Cambium Assessment"]}
+    openalex: {affiliations: ["Cambium"], require: ["El Segundo"]}
+  ses-ai:
+    domains: [ses.ai]
+    news: {terms: ['"SES AI"'], context: [electrolyte, battery, batteries, "Molecular Universe", lithium]}
+    cik: "1819142"
+    openalex: {affiliations: ["SES AI"]}
+  kyulux:
+    domains: [kyulux.com]
+    news: {terms: ['"Kyulux"']}
+    openalex: {institutions: [I4210135852], affiliations: ["Kyulux"]}
+  copernic-catalysts:
+    news: {terms: ['"Copernic Catalysts"']}
+    cik: "1878224"
+    openalex: {affiliations: ["Copernic Catalysts"]}
+    verify: [domains]
+  schrodinger:
+    domains: [schrodinger.com]
+    cik: "1490978"
+  mitra-chem:
+    domains: [mitrachem.com]
+    news: {terms: ['"Mitra Chem"']}
+    cik: "1887663"   # Mitra Future Technologies, Inc., Mountain View ZIP 94043
+    openalex: {affiliations: ["Mitra Chem"]}
+    verify: [cik]
+  arzeda:
+    domains: [arzeda.com]
+    news: {terms: ['"Arzeda"']}
+    cik: "1712438"
+    openalex: {institutions: [I4210162608], affiliations: ["Arzeda"]}
+  chemix:
+    domains: [chemix.ai]
+    news: {terms: ['"Chemix"'], context: [battery, batteries, AI, EV, cells], exclude: ["Daito Chemix"]}
+    openalex: {affiliations: ["Chemix"], require: ["Sunnyvale", "Mountain View", "California", "CA"]}
+  cambrium:
+    domains: [cambrium.bio]
+    news: {terms: ['"Cambrium"'], context: [NovaColl, collagen, protein, biotech, Berlin], exclude: ["Cambrium Mining"]}
+    openalex: {affiliations: ["Cambrium GmbH", "Cambrium"], require: ["Berlin"]}
+  mattiq:
+    domains: [mattiq.com]
+    news: {terms: ['"Mattiq"']}
+    cik: "1843720"
+    openalex: {affiliations: ["Mattiq"]}
+  heraeus:
+    domains: [heraeus.com]
+  radical-ai:
+    domains: [radical-ai.com]
+    news: {terms: ['"Radical AI"'], context: [materials, alloy, alloys, lab, "RAI-939", Series, raises, funding]}
+    openalex: {affiliations: ["Radical AI"]}
+  purdue: {}
+  materials-nexus:
+    domains: [matnex.ai, materialsnexus.com]
+    news: {terms: ['"Materials Nexus"', '"MatNex"']}
+    openalex: {affiliations: ["Materials Nexus"]}
+  cusp-ai:
+    domains: [cusp.ai]
+    news: {terms: ['"CuspAI"', '"Cusp AI"']}
+    openalex: {affiliations: ["CuspAI", "Cusp AI"]}
+  kemira:
+    domains: [kemira.com]
+  eneos:
+    news: {terms: ['"ENEOS" "Matlantis"']}
+  polyfos:
+    news: {terms: ['"Polyfos"']}
+    openalex: {affiliations: ["Polyfos"]}
+    verify: [domains]
+  materialszone:
+    domains: [materials.zone]
+    news: {terms: ['"MaterialsZone"', '"Materials Zone"']}
+
+# ---------------------------------------------------------------- Watch list: signals that could promote an org
+  periodic-labs:
+    domains: [periodic.com]
+    news: {terms: ['"Periodic Labs"']}
+    openalex: {affiliations: ["Periodic Labs"]}
+  chemify:
+    domains: [chemify.io]
+    news: {terms: ['"Chemify"']}
+    openalex: {affiliations: ["Chemify"]}
+  dunia:
+    domains: [dunia.ai]
+    news: {terms: ['"Dunia Innovations"', '"Dunia"'], context: [catalyst, catalysts, materials, electrochemistry, Berlin]}
+    openalex: {affiliations: ["Dunia Innovations"]}
+  altrove:
+    domains: [altrove.ai]
+    news: {terms: ['"Altrove"'], context: [materials, magnets, "rare earth", AI]}
+    openalex: {affiliations: ["Altrove"], require: ["Paris", "France"]}
+  discovered-materials:
+    domains: [discoveredmaterials.com]
+    news: {terms: ['"Discovered Materials"']}
+  entalpic:
+    domains: [entalpic.ai]
+    news: {terms: ['"Entalpic"']}
+    newsroom_feed: https://entalpic.ai/feed/
+    openalex: {affiliations: ["Entalpic"]}
+  matter-machine:
+    news: {terms: ['"Matter Machine"'], context: [materials, AI, lab]}
+  phaseshift:
+    domains: [phaseshift.ai]
+    news: {terms: ['"Phaseshift"'], context: [alloy, alloys, materials, AI]}
+  exomatter:
+    domains: [exomatter.ai]
+    news: {terms: ['"ExoMatter"']}
+    openalex: {affiliations: ["ExoMatter"]}
+  deep-material: {}
+  autonomous-materials-labs:
+    domains: [autonomousmaterials.com]
+    news: {terms: ['"Autonomous Materials Labs"']}
+  xtalpi:
+    domains: [xtalpi.com]
+    news: {terms: ['"XtalPi"'], context: [materials, material, alloy, catalyst, battery]}
+  telescope-innovations:
+    domains: [telescopeinnovations.com]
+    news: {terms: ['"Telescope Innovations"']}
+    newsroom_feed: https://telescopeinnovations.com/feed/
+  kebotix:
+    domains: [kebotix.com]
+    news: {terms: ['"Kebotix"']}
+  tamu-arm-mip: {}
+  wisconsin-alloybot: {}
+  llnl-apex: {}
+  citrine:
+    news: {terms: ['"Citrine Informatics"']}
+  uncountable:
+    news: {terms: ['"Uncountable"'], context: [materials, R&D, formulation, chemicals, raises]}
+  albert-invent:
+    news: {terms: ['"Albert Invent"']}
+  polymerize:
+    news: {terms: ['"Polymerize"'], context: [materials, polymer, AI, R&D]}
+  matmerize:
+    news: {terms: ['"Matmerize"']}
+  intellegens:
+    news: {terms: ['"Intellegens"']}
+  polaron:
+    news: {terms: ['"Polaron"'], context: [materials, microstructure, battery, AI],
+           exclude: ["small polaron", "polaron effect", "polarons"]}
+  sandboxaq:
+    news: {terms: ['"SandboxAQ"'], context: [materials, catalyst, battery, chemistry, alloy]}
+  dp-technology:
+    news: {terms: ['"DP Technology"'], context: [materials, battery, AI]}
+  deep-principle:
+    news: {terms: ['"Deep Principle"']}
+  mat3ra:
+    news: {terms: ['"Mat3ra"']}
+  biovia: {}
+  enthought: {}
+  nobleai:
+    news: {terms: ['"NobleAI"', '"Noble AI"'], context: [materials, chemicals, formulation, AI]}
+  basf-ecms:
+    news: {terms: ['"BASF" "Orbital"', '"BASF" "CurieOS"']}
+  sk-materials-jnc: {}
+  stepan: {}
+  resonac: {}
+  dow: {}
+  3m: {}
+  covestro: {}
+  lg-energy-solution: {}
+  toyota-research-institute: {}
+  questek:
+    news: {terms: ['"QuesTek"']}
+  nasa-grx-810: {}
+  foundation-alloy:
+    domains: [foundationalloy.com]
+    news: {terms: ['"Foundation Alloy"']}
+    newsroom_feed: https://foundationalloy.com/feed/
+    cik: "1930073"
+  aionics:
+    domains: [aionics.io]
+    news: {terms: ['"Aionics"']}
+    newsroom_feed: https://aionics.io/feed/
+    cik: "2023133"
+    openalex: {affiliations: ["Aionics"]}

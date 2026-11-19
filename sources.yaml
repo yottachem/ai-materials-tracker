@@ -1,4 +1,4 @@
-# Source registry. Planned 2026-11-19; access checks are Phase 1-2 work. Cadence: weekly unless noted.
+# Source registry. Access checked 2026-11-19 (Phase 2). Cadence: weekly unless noted.
 sources:
   openalex:
     name: OpenAlex works by tracked institution or author (covers arXiv and ChemRxiv)
@@ -6,23 +6,25 @@ sources:
     auth: free API key; budget per lifesci-tools-tracker notes
     detects: company-reported -> preprint / peer-reviewed; new results from watch-list orgs
     reuse: lifesci-tools-tracker ingest/openalex.py
-    status: to check (startups often lack an institution ID; curated author IDs as fallback)
+    status: live 2026-11-19 (ingest/openalex.py). Only Kyulux and Arzeda have institution ids; other startups match raw affiliation text, big labs use author ids or institution + query
   crossref_updates:
     name: Crossref updates (corrections, retractions, Retraction Watch data) on tracked DOIs
     url: https://api.crossref.org/works
     auth: none; polite pool with contact email
     detects: dispute status
-    status: to check
+    status: live 2026-11-19 (ingest/crossref.py); found the known A-Lab Author Correction on first run
   news:
     name: Bing News RSS, Google News RSS (resolved to publishers), company newsroom feeds
     detects: launches, shipments, licenses, pilots; funding
     reuse: physical-ai-tracker ingest/news.py, classify/
+    status: live 2026-11-19 (Bing, Google News, 5 newsroom feeds)
     license: headlines and links only
   sec:
     name: SEC EDGAR filings (Form D) and XBRL facts (SES AI, Schrodinger)
     url: https://data.sec.gov/
     auth: none; User-Agent with contact email
     reuse: physical-ai-tracker ingest/filings.py, ingest/financials.py
+    status: filings live 2026-11-19 (7 CIKs; Form D for Copernic, Mitra, Arzeda, Mattiq, Foundation Alloy, Aionics). XBRL is Phase 3
   patents:
     name: USPTO Open Data Portal bulk (PatentsView moved 2026-03), assignee match in materials CPC
     cpc: [B01J, C01, C04B, C08, C09K, C22C, H01M]

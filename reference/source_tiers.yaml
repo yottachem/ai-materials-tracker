@@ -1,4 +1,6 @@
 # Source tiers decide what is auto-accepted into reference/ledger.csv.
+# Ported from physical-ai-tracker 2026-11-19; materials trade press, universities, national labs and corporate labs added.
+# Org-owned domains come from reference/signals.yaml.
 # tier1: auto-accept when the parse is clean and nothing in the ledger conflicts.
 #   Primary sources (company domains from companies.yaml, wires, SEC, government, university) plus a major-outlet allowlist.
 # tier2: reputable trade and regional press. Review queue.
@@ -9,15 +11,20 @@
 # the first 90-day news backfill (major outlets not on the tier-1 allowlist go to tier2 until the owner promotes them).
 
 tier1:
-  wires: [businesswire.com, globenewswire.com, prnewswire.com, accesswire.com]
+  wires: [businesswire.com, globenewswire.com, prnewswire.com, prnewswire.co.uk, accesswire.com, webwire.com]
   filings: [sec.gov]
   government: [ca.gov, maryland.gov, masstech.org, texas.gov, darpa.mil, arpa-h.gov, fda.gov, energy.gov]
-  university: [cmu.edu, mit.edu]
+  university: [cmu.edu, mit.edu, utoronto.ca, liverpool.ac.uk, ncsu.edu, harvard.edu, purdue.edu, ethz.ch, berkeley.edu,
+               eurekalert.org]   # eurekalert hosts institutions' own releases
+  national_labs: [pnnl.gov, anl.gov, lbl.gov, llnl.gov, ornl.gov, nrel.gov, nist.gov, osti.gov, nasa.gov]
+  corporate_labs: [microsoft.com, deepmind.google, blog.google, ai.meta.com, about.fb.com, samsung.com]
   ir_hosting: [q4cdn.com]   # investor-relations document host (Ginkgo's Novo release)
   outlets: [reuters.com, bloomberg.com, wsj.com, ft.com, nytimes.com, apnews.com, cnbc.com, axios.com,
             theinformation.com, techcrunch.com, bostonglobe.com, therobotreport.com]
 
-tier2: [3dprint.com, abc7news.com, androidauthority.com, arstechnica.com, asahi.com, automate.org, automationworld.com,
+tier2: [azom.com, betakit.com, finchannel.com, freepressjournal.in, wsgr.com, cen.acs.org, chemistryworld.com, phys.org, sciencedaily.com, materialstoday.com, compositesworld.com,
+        hydrocarbonprocessing.com, worldfertilizer.com, electrive.com, batterytechonline.com, chemanalyst.com,
+        ammoniaenergy.org, newatlas.com, technologyreview.com, 3dprint.com, abc7news.com, androidauthority.com, arstechnica.com, asahi.com, automate.org, automationworld.com,
         aviationweek.com, barrons.com, biopharmatrend.com, biospace.com, bizjournals.com, bostonbizscene.com,
         breakbulk.news, breakingdefense.com, builtin.com, business.mammothtimes.com, businessinsider.com,
         caixinglobal.com, citybiz.co, clearygottlieb.com, cnet.com, dcvelocity.com, defensenews.com,
@@ -35,7 +42,7 @@ tier2: [3dprint.com, abc7news.com, androidauthority.com, arstechnica.com, asahi.
         truckinginfo.com, trucknews.com, ttnews.com, venturebeat.com, washingtontechnology.com, wired.com, wwd.com,
         yicaiglobal.com, zdnet.com, zebra.com]
 
-secondary: [247wallst.com, ad-hoc-news.de, ai2.work, ainvest.com, aiwiki.ai, aol.com, asdnews.com, benzinga.com,
+secondary: [247wallst.com, wric.com, ad-hoc-news.de, ai2.work, ainvest.com, aiwiki.ai, aol.com, asdnews.com, benzinga.com,
             boringbusinessnerd.com, complex.com, cryptobriefing.com, dealroom.co, deep-tech-week.com, dev.to,
             evsint.com, excedr.com, fast.io, finance.biggo.com, finviz.com, fool.com, hoodline.com, humanoid.guide,
             humanoidsdaily.com, ifactoryapp.com, insidermonkey.com, investing.com, kalkinemedia.com, komo.ai,
