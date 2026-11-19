@@ -1,0 +1,34 @@
+# Source registry. Planned 2026-11-19; access checks are Phase 1-2 work. Cadence: weekly unless noted.
+sources:
+  openalex:
+    name: OpenAlex works by tracked institution or author (covers arXiv and ChemRxiv)
+    url: https://api.openalex.org/works
+    auth: free API key; budget per lifesci-tools-tracker notes
+    detects: company-reported -> preprint / peer-reviewed; new results from watch-list orgs
+    reuse: lifesci-tools-tracker ingest/openalex.py
+    status: to check (startups often lack an institution ID; curated author IDs as fallback)
+  crossref_updates:
+    name: Crossref updates (corrections, retractions, Retraction Watch data) on tracked DOIs
+    url: https://api.crossref.org/works
+    auth: none; polite pool with contact email
+    detects: dispute status
+    status: to check
+  news:
+    name: Bing News RSS, Google News RSS (resolved to publishers), company newsroom feeds
+    detects: launches, shipments, licenses, pilots; funding
+    reuse: physical-ai-tracker ingest/news.py, classify/
+    license: headlines and links only
+  sec:
+    name: SEC EDGAR filings (Form D) and XBRL facts (SES AI, Schrodinger)
+    url: https://data.sec.gov/
+    auth: none; User-Agent with contact email
+    reuse: physical-ai-tracker ingest/filings.py, ingest/financials.py
+  patents:
+    name: USPTO Open Data Portal bulk (PatentsView moved 2026-03), assignee match in materials CPC
+    cpc: [B01J, C01, C04B, C08, C09K, C22C, H01M]
+    cadence: quarterly
+    reuse: lifesci-tools-tracker ingest/uspto.py
+  usaspending:
+    name: USAspending and SBIR awards
+    reuse: lifesci-tools-tracker ingest/usaspending.py
+not_used: [job boards, CB Insights, PitchBook, Crunchbase (figures enter only via a tier-1 article that cites them)]

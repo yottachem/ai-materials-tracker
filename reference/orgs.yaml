@@ -1,0 +1,113 @@
+# Organization registry. Secondary to materials.yaml: every organization named in a material's `orgs` must be here.
+# type: company | corporate-lab | academic | incumbent
+# watch: why an organization with no qualifying material is tracked (excluded orgs only)
+# funding: total disclosed, USD millions. tier: tier1 (company, wire, SEC) | aggregator (CB Insights, PitchBook, Fundz).
+#   The public chart plots tier1 only (plan, 2026-11-19); aggregator rows are placeholders until re-sourced.
+# Seeded 2026-11-19 from the Tools Companies vault screen.
+
+orgs:
+
+# ---------------------------------------------------------------- Organizations with a material
+- {id: lila-sciences, name: Lila Sciences, type: company, hq: "Cambridge, MA",
+   funding: {low: 550, high: 550, tier: aggregator}, verify: [funding]}
+- {id: atinary, name: Atinary, type: company, hq: "Lausanne, Switzerland",
+   funding: {low: 5, high: 9.8, tier: aggregator, note: "$5M seed (AgFunder release); CB Insights lists $9.8M"},
+   sources: ["https://agfundernews.com/atinary-technologies-raises-5m-seed-round-to-turbocharge-rd-process"], verify: [funding]}
+- {id: eth-zurich, name: ETH Zurich (SwissCat+), type: academic, hq: "Zurich, Switzerland"}
+- {id: meta, name: Meta, type: corporate-lab, hq: "Menlo Park, CA"}
+- {id: amrize, name: Amrize, type: incumbent, hq: "Chicago, IL", note: "Partnered and produced the deployed mix (incumbent rule met)"}
+- {id: microsoft, name: Microsoft Research / Azure Quantum, type: corporate-lab, hq: "Redmond, WA"}
+- {id: pnnl, name: Pacific Northwest National Laboratory, type: academic, hq: "Richland, WA"}
+- {id: siat, name: Shenzhen Institutes of Advanced Technology, type: academic, hq: "Shenzhen, China"}
+- {id: google-deepmind, name: Google DeepMind, type: corporate-lab, hq: "London, UK"}
+- {id: harvard, name: Harvard University (Aspuru-Guzik group, 2016), type: academic, hq: "Cambridge, MA"}
+- {id: samsung, name: Samsung Advanced Institute of Technology, type: corporate-lab, hq: "Suwon, South Korea"}
+- {id: u-liverpool, name: University of Liverpool (Cooper group), type: academic, hq: "Liverpool, UK"}
+- {id: argonne, name: Argonne National Laboratory (Polybot), type: academic, hq: "Lemont, IL"}
+- {id: u-toronto, name: University of Toronto (Zou lab; Acceleration Consortium), type: academic, hq: "Toronto, Canada"}
+- {id: nc-state, name: NC State University (Abolhasani, PoLARIS), type: academic, hq: "Raleigh, NC"}
+- {id: berkeley-lab, name: Lawrence Berkeley National Laboratory (A-Lab), type: academic, hq: "Berkeley, CA"}
+- {id: orbital-industries, name: Orbital Industries, former_names: [Orbital Materials], type: company, hq: "London, UK",
+   funding: {low: 71, high: 71, tier: tier1, note: "$21M through Series A + $50M Series B (May 2026)"},
+   sources: ["https://orbitalmaterials.com/news/series-a-announcement", "https://fortune.com/2026/05/28/exclusive-orbital-industries-raises-50-million-series-b-funding-round-ai-to-discover-exotic-new-materials/"]}
+- {id: cambium, name: Cambium, type: company, hq: "El Segundo, CA", note: "Not Cambrium (Berlin, bio)",
+   funding: {low: 127, high: 142, tier: aggregator}, sources: ["https://pitchbook.com/profiles/company/435210-04"], verify: [funding]}
+- {id: ses-ai, name: SES AI, type: company, hq: "Woburn, MA", ticker: SES, note: "Public; not plotted on the funding chart"}
+- {id: kyulux, name: Kyulux, type: company, hq: "Fukuoka, Japan",
+   funding: {low: 108, high: 162, tier: aggregator, note: "~JPY 12.7B through Series C (company); +$53.7M Series D Nov 2026 (Fundz only)"},
+   sources: ["https://www.gophotonics.com/news/details/5507-kyulux-secures-28-6m-in-series-c-to-accelerate-product-development-and-targets-full-scale-mass-production", "https://app.fundz.net/fundings/kyulux-funding-round-series-d-cd0fe2"], verify: [funding]}
+- {id: copernic-catalysts, name: Copernic Catalysts, type: company, hq: "Cambridge, MA",
+   funding: {low: 14, high: 14, tier: aggregator, note: "Incl. grants"}, verify: [funding]}
+- {id: schrodinger, name: Schrodinger, type: company, hq: "New York, NY", ticker: SDGR, note: "Platform partner on Copernic's Neptune; no material of its own"}
+- {id: mitra-chem, name: Mitra Chem, type: company, hq: "Mountain View, CA",
+   funding: {low: 76, high: 243, tier: aggregator, note: "Sources disagree"}, sources: ["https://www.cbinsights.com/company/mitra-chem/financials"], verify: [funding]}
+- {id: arzeda, name: Arzeda, type: company, hq: "Seattle, WA", bio: true,
+   funding: {low: 83, high: 83, tier: aggregator}, verify: [funding]}
+- {id: chemix, name: Chemix, type: company, hq: "California",
+   funding: {low: 20, high: 30, tier: aggregator, note: "$10M seed + $20M Series A (Apr 2024)"},
+   sources: ["https://www.webwire.com/ViewPressRel.asp?aId=320895", "https://www.cbinsights.com/company/chemix/financials"], verify: [funding, hq]}
+- {id: cambrium, name: Cambrium, type: company, hq: "Berlin, Germany", bio: true, note: "Not Cambium (El Segundo)",
+   funding: {low: 11.6, high: 13.5, tier: aggregator, note: "EUR 11M per Oct 2023 seed coverage; CB Insights $13.5M"},
+   sources: ["https://beautymatter.com/articles/cambrium-raises-11-6-million-to-commercialize-performance-molecules"], verify: [funding]}
+- {id: mattiq, name: Mattiq, type: company, hq: "Chicago, IL",
+   funding: {low: 15, high: 15, tier: tier1, note: "$15M seed (launch release, Feb 2023)"},
+   sources: ["https://www.businesswire.com/news/home/20230207005510/en/Mattiq-Launches-With-Revolutionary-Approach-to-Developing-Sustainable-Materials"], verify: [hq]}
+- {id: heraeus, name: Heraeus Precious Metals, type: incumbent, hq: "Hanau, Germany", note: "Scale-up partner for Mattiq"}
+- {id: radical-ai, name: Radical AI, type: company, hq: "New York, NY",
+   funding: {low: 55, high: 65, tier: aggregator}, sources: ["https://pulse2.com/radical-ai-55-million-series-seed-raised-for-advancing-materials-research"], verify: [funding]}
+- {id: purdue, name: Purdue University, type: academic, hq: "West Lafayette, IN"}
+- {id: materials-nexus, name: Materials Nexus, type: company, hq: "London, UK",
+   funding: {low: 2.6, high: 2.6, tier: aggregator}, sources: ["https://www.cbinsights.com/company/materials-nexus/financials"], verify: [funding]}
+- {id: cusp-ai, name: CuspAI, type: company, hq: "Cambridge, UK",
+   funding: {low: 580, high: 670, tier: aggregator}, verify: [funding]}
+- {id: kemira, name: Kemira, type: incumbent, hq: "Helsinki, Finland"}
+- {id: eneos, name: ENEOS (Matlantis with Preferred Networks), type: incumbent, hq: "Tokyo, Japan"}
+- {id: polyfos, name: Polyfos, type: company, hq: ""}
+- {id: materialszone, name: MaterialsZone, type: company, hq: "Tel Aviv, Israel", note: "Platform vendor; listed for its Polyfos customer case"}
+
+# ---------------------------------------------------------------- Watch list (no qualifying material yet)
+- {id: periodic-labs, name: Periodic Labs, type: company, watch: no-result,
+   funding: {low: 300, high: 300, tier: aggregator, note: "$300M seed; reported $750M Series A unconfirmed"}, verify: [funding]}
+- {id: chemify, name: Chemify, type: company, watch: no-result, funding: {low: 150, high: 150, tier: aggregator}, verify: [funding]}
+- {id: dunia, name: Dunia Innovations, type: company, watch: no-result}
+- {id: altrove, name: Altrove, type: company, watch: no-result}
+- {id: discovered-materials, name: Discovered Materials, type: company, watch: no-result}
+- {id: entalpic, name: Entalpic, type: company, watch: no-result}
+- {id: matter-machine, name: Matter Machine, type: company, watch: no-result}
+- {id: phaseshift, name: Phaseshift, type: company, watch: no-result}
+- {id: exomatter, name: ExoMatter, type: company, watch: no-result}
+- {id: deep-material, name: Deep Material, type: company, watch: no-result}
+- {id: autonomous-materials-labs, name: Autonomous Materials Labs, type: company, watch: no-result}
+- {id: xtalpi, name: XtalPi, type: company, watch: no-result, note: "Materials work is partnerships (A*STAR MARVEL-AI)"}
+- {id: telescope-innovations, name: Telescope Innovations, type: company, watch: no-result, note: "Lab automation for battery raw-material processing"}
+- {id: kebotix, name: Kebotix, type: company, watch: no-result, note: "No news since 2020"}
+- {id: tamu-arm-mip, name: Texas A&M ARM-MIP, type: academic, watch: no-result}
+- {id: wisconsin-alloybot, name: University of Wisconsin AlloyBot, type: academic, watch: no-result}
+- {id: llnl-apex, name: LLNL APEX, type: academic, watch: no-result}
+- {id: citrine, name: Citrine Informatics, type: company, watch: platform, note: "Panasonic molecule validated by DFT only; Stepan case names no product"}
+- {id: uncountable, name: Uncountable, type: company, watch: platform}
+- {id: albert-invent, name: Albert Invent, type: company, watch: platform}
+- {id: polymerize, name: Polymerize, type: company, watch: platform}
+- {id: matmerize, name: Matmerize, type: company, watch: platform}
+- {id: intellegens, name: Intellegens, type: company, watch: platform}
+- {id: polaron, name: Polaron, type: company, watch: platform}
+- {id: sandboxaq, name: SandboxAQ, type: company, watch: platform}
+- {id: dp-technology, name: DP Technology, type: company, watch: platform}
+- {id: deep-principle, name: Deep Principle, type: company, watch: platform}
+- {id: mat3ra, name: Mat3ra, type: company, watch: platform, note: "DOE Genesis projects not yet reporting"}
+- {id: biovia, name: Dassault BIOVIA, type: company, watch: platform}
+- {id: enthought, name: Enthought, type: company, watch: platform}
+- {id: nobleai, name: NobleAI, type: company, watch: platform}
+- {id: basf-ecms, name: BASF ECMS, type: incumbent, watch: incumbent-no-product, note: "Licensed Orbital's CurieOS (Aug 2026)"}
+- {id: sk-materials-jnc, name: SK Materials JNC, type: incumbent, watch: incumbent-no-product, note: "Kyulux licensee"}
+- {id: stepan, name: Stepan, type: incumbent, watch: incumbent-no-product}
+- {id: resonac, name: Resonac, type: incumbent, watch: incumbent-no-product}
+- {id: dow, name: Dow, type: incumbent, watch: incumbent-no-product}
+- {id: 3m, name: 3M, type: incumbent, watch: incumbent-no-product}
+- {id: covestro, name: Covestro, type: incumbent, watch: incumbent-no-product}
+- {id: lg-energy-solution, name: LG Energy Solution, type: incumbent, watch: incumbent-no-product}
+- {id: toyota-research-institute, name: Toyota Research Institute, type: corporate-lab, watch: incumbent-no-product}
+- {id: questek, name: QuesTek Innovations, type: company, watch: no-ml, note: "Ferrium alloys by ICME computational design"}
+- {id: nasa-grx-810, name: NASA GRX-810 team, type: academic, watch: no-ml, note: "Model-driven design; licensed to Carpenter, Elementum 3D, Linde, Powder Alloy Corp."}
+- {id: foundation-alloy, name: Foundation Alloy, type: company, hq: "Boston, MA", watch: no-ml, note: "Molyclast MC1200 launched Jan 2026; no ML role stated"}
+- {id: aionics, name: Aionics, type: company, hq: "Palo Alto, CA", watch: founder-work, note: "Published electrolyte is founders' Stanford research; promote on company-authored work"}

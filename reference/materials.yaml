@@ -1,0 +1,665 @@
+# Material registry: one entry per material. The material is the unit; organizations are secondary (orgs.yaml).
+# Seeded 2026-11-19 from the Tools Companies vault screen (wiki/analyses/2026-11-19-ai-materials-screen.md)
+# and the benchmark pass the same day.
+#
+# Enums (tracker/registry.py enforces them):
+#   evidence: peer-reviewed | preprint | company-reported | claim
+#   stage:    deployed (sold or in use in a product or structure) | customer-tested (samples, pilots, scale-up partner, license) | lab
+#   benchmark.basis:
+#     head-to-head      same test, same lab, against the field's best or the commercial incumbent
+#     literature        material's value vs a best-in-class value from a different study
+#     internal-baseline vs the starting recipe or the authors' own control, not the field's best
+#     design-target     vs the property the model was asked to hit
+#     none-stated       no quantitative comparison found; a finding, not a gap to paper over
+#     not-applicable    bulk discovery result, not a single material
+# `verify` lists fields still to confirm against a primary source; LAUNCH_GATE=1 tests fail while any remain.
+
+materials:
+
+# ---------------------------------------------------------------- Verified: published, real material
+- id: lila-inmnpdox
+  name: InMnPdOx anode catalyst
+  orgs: [lila-sciences]
+  material_class: catalyst
+  application: Acidic oxygen evolution (PEM water electrolyzer anode)
+  what_is_new: Iridium- and ruthenium-free oxide that survives acid; palladium had been considered a dead end for acidic OER
+  key_property:
+    name: Overpotential at 10 mA/cm2 in 1 M H2SO4
+    value: 0.45 V (not iR-corrected); stayed below 0.5 V over 1,000 h. PdOx failed at ~200 h, NiTaPdOx at ~470 h
+    source: https://arxiv.org/abs/2609.30133
+  benchmark:
+    material: Commercial IrO2
+    value: 0.336 V at 10 mA/cm2 (different lab and conditions)
+    source: https://pmc.ncbi.nlm.nih.gov/articles/PMC13502665/
+    basis: literature
+    gap: About 0.1 V more overpotential than commercial IrO2, with no iridium
+    tradeoffs: Palladium is itself a platinum-group metal; humans moved samples between tools
+  ai_role: AI-guided, human-supervised closed loop (>90% automated); 2,942 catalysts across 53 systems and 26 elements
+  evidence: preprint
+  stage: lab
+  publication: {id: "arXiv:2609.30133", url: "https://arxiv.org/abs/2609.30133", title: "AI-guided high-throughput discovery of iridium- and ruthenium-free palladium-oxide catalysts for durable acidic oxygen evolution", date: 2026-09-24}
+  sources: ["https://cen.acs.org/business/start-ups/lila-ai-hydrogen-catalyst-electrolyzer/104/web/2026/10"]
+  verified: 2026-11-19
+  verify: [orgs, benchmark.value]   # affiliation block unread (PDF too large); look for an IrO2 control in the paper
+
+- id: atinary-cuzncezro2
+  name: Cu-Zn-Ce on ZrO2 methanol catalyst
+  orgs: [atinary, eth-zurich]
+  material_class: catalyst
+  application: CO2 hydrogenation to methanol
+  what_is_new: Found in 144 experiments out of 20M+ combinations; Atinary describes it as a re-discovery of the best known catalyst, not a new best
+  key_property:
+    name: CO2 conversion and methanol selectivity
+    value: 10.2% CO2 conversion, 41.8% methanol selectivity (1.85% Cu / 0.69% Zn / 0.05% Ce on ZrO2)
+    source: https://doi.org/10.1016/j.checat.2023.100888
+  benchmark:
+    material: Best known CO2-to-methanol catalyst (per Atinary; commercial Cu/ZnO/Al2O3 is the industrial reference)
+    value: Not stated in accessible sources
+    source: https://atinary.com/use-cases/ethzurich/
+    basis: none-stated
+    gap: Re-discovery of the known best in 0.00072% of the search space; the speed is the result
+    tradeoffs: ""
+  ai_role: Bayesian optimization + automated synthesis and testing (11 parameters, 4 objectives)
+  evidence: peer-reviewed
+  stage: lab
+  publication: {id: "doi:10.1016/j.checat.2023.100888", url: "https://doi.org/10.1016/j.checat.2023.100888", title: "Accelerated exploration of heterogeneous CO2 hydrogenation catalysts by Bayesian-optimized high-throughput and automated experimentation", date: 2024}
+  sources: ["https://atinary.com/use-cases/ethzurich/", "https://www.nature.com/articles/s41929-024-01124-5"]
+  verified: 2026-11-19
+  verify: [benchmark.value]   # paper full text for the commercial comparison
+
+- id: meta-amrize-concrete
+  name: AI-optimized low-carbon concrete mix (Rosemount, MN)
+  orgs: [meta, amrize]
+  material_class: cement-concrete
+  application: Structural concrete for a data center
+  what_is_new: Recipe of a known material class tuned by AI and poured at scale; the only AI-made material both published and deployed
+  key_property:
+    name: Early strength gain and embodied carbon
+    value: Reached 4,000 psi 43% faster; embodied carbon 35% lower; drying shrinkage 9.5% lower; similar cost
+    source: https://www.enr.com/articles/61140-amrize-meta-partner-on-low-carbon-concrete-for-minnesota-data-center
+  benchmark:
+    material: Original mix formula (strength); NRMCA regional average mix (carbon)
+    value: Absolute baseline values not published
+    source: https://engineering.fb.com/2025/07/16/data-center-engineering/ai-make-lower-carbon-faster-curing-concrete/
+    basis: internal-baseline
+    gap: 43% faster strength gain vs the original formula; 35% lower carbon vs the regional average
+    tradeoffs: Long-term durability still under test at UIUC
+  ai_role: Bayesian optimization of the mix recipe (BOxCrete, open model on 500+ strength measurements from 123 mixes)
+  evidence: preprint
+  stage: deployed
+  publication: {id: "arXiv:2603.21525", url: "https://arxiv.org/abs/2603.21525", title: "BOxCrete", date: 2026}
+  sources: ["https://engineering.fb.com/2026/03/30/data-center-engineering/ai-for-american-produced-cement-and-concrete/", "https://www.amrize.com/us/en/newsroom/concrete--now-with-ai--see-how-at-the-new-meta-data-center", "https://cee.illinois.edu/news/Garg-Meta-Amrize-project-of-the-year"]
+  verified: 2026-11-19
+  verify: [publication.title]
+
+- id: pnnl-naxli3-xycl6
+  name: NaxLi3-xYCl6 solid electrolyte series
+  orgs: [microsoft, pnnl]
+  material_class: electrolyte
+  application: Solid-state lithium battery electrolyte
+  what_is_new: Mixed sodium-lithium chloride electrolyte found by screening 32.6M candidates down to 18; Na2LiYCl6 uses one lithium per formula unit instead of three
+  key_property:
+    name: Ionic conductivity
+    value: Na2LiYCl6 2.2e-6 S/cm at 100 C (vs 6.0e-8 S/cm for parent Na3YCl6)
+    source: https://arxiv.org/abs/2401.04070
+  benchmark:
+    material: Li3YCl6 (lithium-only chloride electrolyte)
+    value: 0.2-1.0 mS/cm at room temperature (ball-milled, hot-pressed samples)
+    source: https://www.osti.gov/pages/biblio/17067935-structure-li3ycl6-its-effect-lithium-ionic-conductivity
+    basis: literature
+    gap: Roughly 100-500x lower conductivity than Li3YCl6, even measured at 100 C against room temperature
+    tradeoffs: Less lithium at a large conductivity cost; samples were mixed-phase. The "70% less lithium" figure is Microsoft's framing, not in the paper
+  ai_role: ML + cloud HPC screening, 32.6M candidates to 18
+  evidence: peer-reviewed
+  stage: lab
+  publication: {id: "doi:10.1021/jacs.4c03849", url: "https://doi.org/10.1021/jacs.4c03849", title: "Accelerating Computational Materials Discovery with Machine Learning and Cloud High-Performance Computing", date: 2024-07-09}
+  sources: ["https://www.pnnl.gov/publications/accelerating-computational-materials-discovery-machine-learning-and-cloud-high"]
+  verified: 2026-11-19
+  verify: [key_property.value]   # arXiv v1 values; JACS version unread
+
+- id: mattergen-tacr2o6
+  name: TaCr2O6
+  orgs: [microsoft, siat]
+  material_class: inorganic-crystal
+  application: Demonstration of property-targeted generative design
+  what_is_new: Structure proposed by a generative model conditioned on a target bulk modulus, then synthesized
+  key_property:
+    name: Bulk modulus
+    value: 169 GPa measured
+    source: https://microsoft.com/en-us/research/blog/mattergen-a-new-paradigm-of-materials-design-with-generative-ai
+  benchmark:
+    material: Design target
+    value: 200 GPa
+    source: https://microsoft.com/en-us/research/blog/mattergen-a-new-paradigm-of-materials-design-with-generative-ai
+    basis: design-target
+    gap: 15% below target
+    tradeoffs: Novelty disputed; the phase may already have been in the training data
+  ai_role: Generative model (MatterGen)
+  evidence: peer-reviewed
+  stage: lab
+  publication: {id: "doi:10.1038/s41586-025-08628-5", url: "https://doi.org/10.1038/s41586-025-08628-5", title: "A generative model for inorganic materials design", date: 2025}
+  dispute: {status: disputed, critique: "https://pubs.rsc.org/en/content/articlelanding/2026/mh/d6mh00268d", summary: "Mater. Horiz. 2026 argues the phase was already in the training data"}
+  sources: []
+  verified: 2026-11-19
+  verify: [publication.id]
+
+- id: gnome-crystals
+  name: GNoME predicted stable crystals
+  orgs: [google-deepmind]
+  material_class: inorganic-crystal
+  application: Bulk discovery of stable inorganic crystals
+  what_is_new: 380K predicted stable crystals; 736 made independently by outside labs
+  key_property:
+    name: Experimentally realized structures
+    value: 736 synthesized by outside labs
+    source: https://deepmind.google/blog/millions-of-new-materials-discovered-with-deep-learning/
+  benchmark:
+    material: n/a
+    value: ""
+    source: ""
+    basis: not-applicable
+    gap: Not a single material; the 736 syntheses were mostly not AI-directed
+    tradeoffs: ""
+  ai_role: Graph neural network screening
+  evidence: peer-reviewed
+  stage: lab
+  publication: {id: "doi:10.1038/s41586-023-06735-9", url: "https://doi.org/10.1038/s41586-023-06735-9", title: "Scaling deep learning for materials discovery", date: 2023}
+  sources: []
+  verified: 2026-11-19
+  verify: [publication.id]
+
+- id: harvard-samsung-tadf
+  name: Blue TADF OLED emitters (1.6M-molecule screen)
+  orgs: [harvard, samsung]
+  material_class: oled
+  application: OLED emitters
+  what_is_new: Emitters chosen by ML-prioritized virtual screening of 1.6M molecules, then synthesized and built into devices; origin of Kyulux's Kyumatic platform
+  key_property:
+    name: External quantum efficiency
+    value: Up to 22%
+    source: https://www.nature.com/articles/nmat4717.pdf
+  benchmark:
+    material: Best light-blue TADF emitter reported in 2016
+    value: 25% EQE
+    source: https://pubs.rsc.org/lt/content/articlelanding/2016/tc/c5tc04057d/unauth
+    basis: literature
+    gap: Competitive with the 2016 best (22% vs 25%), not a record; deep-blue TADF has since reached 33.5% (2021)
+    tradeoffs: ""
+  ai_role: ML-prioritized virtual screening + quantum chemistry
+  evidence: peer-reviewed
+  stage: lab
+  publication: {id: "doi:10.1038/nmat4717", url: "https://doi.org/10.1038/nmat4717", title: "Design of efficient molecular organic light-emitting diodes by a high-throughput virtual screening and experimental approach", date: 2016}
+  sources: ["https://www.nature.com/articles/s41566-021-00763-5.pdf"]
+  verified: 2026-11-19
+  verify: [benchmark.source]
+
+- id: liverpool-photocatalyst
+  name: Photocatalyst mixture for hydrogen from water
+  orgs: [u-liverpool]
+  material_class: catalyst
+  application: Photocatalytic hydrogen production
+  what_is_new: Formulation found by a mobile robot in 688 experiments over 8 days (10 variables)
+  key_property:
+    name: Hydrogen evolution activity
+    value: 6x the initial formulations
+    source: https://livrepository.liverpool.ac.uk/3095139/
+  benchmark:
+    material: Initial formulations of the campaign
+    value: ""
+    source: https://livrepository.liverpool.ac.uk/3095139/
+    basis: internal-baseline
+    gap: 6x more active than where the robot started; no comparison to the field's best photocatalysts
+    tradeoffs: ""
+  ai_role: Mobile robot + batched Bayesian search
+  evidence: peer-reviewed
+  stage: lab
+  publication: {id: "doi:10.1038/s41586-020-2442-2", url: "https://doi.org/10.1038/s41586-020-2442-2", title: "A mobile robotic chemist", date: 2020}
+  sources: []
+  verified: 2026-11-19
+  verify: [key_property.value]   # absolute H2 rate and base polymer in the gated paper
+
+- id: argonne-pedot-pss
+  name: PEDOT:PSS conductive films (Polybot)
+  orgs: [argonne]
+  material_class: polymer
+  application: Transparent conductive electronic polymer films
+  what_is_new: Processing recipe optimized jointly for conductivity and coating defects across a 7-dimension process space
+  key_property:
+    name: Electrical conductivity
+    value: Above 4,500 S/cm averaged, with full film coverage
+    source: https://www.anl.gov/article/selfdriving-lab-transforms-materials-discovery
+  benchmark:
+    material: H2SO4-treated PEDOT:PSS films
+    value: Above 4,000 S/cm
+    source: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7694649/
+    basis: literature
+    gap: Comparable to the best acid-treated films, not a record; the gain is low defects at that conductivity
+    tradeoffs: ""
+  ai_role: Importance-guided Bayesian optimization of processing
+  evidence: peer-reviewed
+  stage: lab
+  publication: {id: "doi:10.1038/s41467-024-55655-3", url: "https://doi.org/10.1038/s41467-024-55655-3", title: "Autonomous platform for solution processing of electronic polymers", date: 2025}
+  sources: ["https://link.springer.com/content/pdf/10.1557/s43577-025-00980-1.pdf"]
+  verified: 2026-11-19
+  verify: [key_property.value, benchmark.source]   # paper gated; 4,500 S/cm from the Argonne article
+
+- id: toronto-nicocr-alloys
+  name: 3D-printable NiCoCr alloys (36Ni-14Co-50Cr; 12Ni-62Co-26Cr)
+  orgs: [u-toronto]
+  material_class: alloy
+  application: High-temperature parts by additive manufacturing (aerospace, energy)
+  what_is_new: Three-element alloys that beat a 10+ element superalloy on oxidation and hot hardness
+  key_property:
+    name: Oxidation resistance at 1000 C; hardness up to 600 C
+    value: 36Ni-14Co-50Cr 85% better oxidation resistance; 12Ni-62Co-26Cr 4.5% higher hot hardness
+    source: https://news.engineering.utoronto.ca/self-driving-lab-leverages-ai-to-develop-tough-new-3d-printable-metal-alloys-for-aerospace-and-advanced-manufacturing/
+  benchmark:
+    material: Inconel 625
+    value: Tested in the same lab
+    source: https://news.engineering.utoronto.ca/self-driving-lab-leverages-ai-to-develop-tough-new-3d-printable-metal-alloys-for-aerospace-and-advanced-manufacturing/
+    basis: head-to-head
+    gap: +85% oxidation resistance (one alloy); +4.5% hot hardness (another); no single alloy wins both
+    tradeoffs: ""
+  ai_role: Active learning (ALPHA-AM) + laser directed energy deposition
+  evidence: peer-reviewed
+  stage: lab
+  publication: {id: "doi:10.1038/s44334-026-00098-5", url: "https://doi.org/10.1038/s44334-026-00098-5", title: "Active learning for the accelerated discovery of complex concentrated NiCoCr alloys in additive manufacturing", date: 2026}
+  sources: ["https://www.researchgate.net/publication/407554471_Active_learning_for_the_accelerated_discovery_of_complex_concentrated_NiCoCr_alloys_in_additive_manufacturing"]
+  verified: 2026-11-19
+  verify: [key_property.value]   # figures from the U of T release; paper paywalled
+
+- id: ncstate-double-perovskite
+  name: Lead-free double perovskite nanoplatelets (PoLARIS)
+  orgs: [nc-state]
+  material_class: optical
+  application: Lead-free light emitters
+  what_is_new: Up to six-element nanoplatelets found in one 12 h, 120-experiment campaign
+  key_property:
+    name: Brightness (photoluminescence)
+    value: Not quantified in the release; "best-in-class"
+    source: https://www.eurekalert.org/news-releases/1126928
+  benchmark:
+    material: Bi-doped Cs2AgxNa1-xInCl6 nanoplatelets (near-unity PLQY, 2023)
+    value: Near-unity PLQY
+    source: https://pubmed.ncbi.nlm.nih.gov/37756015/
+    basis: none-stated
+    gap: The release claims best-in-class without a number; the field already has near-unity PLQY lead-free nanoplatelets
+    tradeoffs: ""
+  ai_role: Autonomous microfluidic optimization
+  evidence: peer-reviewed
+  stage: lab
+  publication: {id: "doi:10.1038/s41467-026-72765-2", url: "https://doi.org/10.1038/s41467-026-72765-2", title: "Autonomous microfluidic experimentation for exploring reaction interference and synthesizing double perovskite nanoplatelets", date: 2026-05-04}
+  sources: ["https://news.ncsu.edu/2026/05/ai-powered-lab-discovers-brighter-lead-free-nanomaterials-in-12-hours/"]
+  verified: 2026-11-19
+  verify: [key_property.value]   # PLQY and composition in the paper
+
+- id: alab-inorganic-compounds
+  name: A-Lab synthesized inorganic compounds
+  orgs: [berkeley-lab]
+  material_class: inorganic-crystal
+  application: Autonomous synthesis of predicted compounds
+  what_is_new: 41 of 58 targets made in 17 days as first reported; four later removed as inconclusive from XRD alone
+  key_property:
+    name: Synthesis success rate
+    value: 41 of 58 as reported (revised down by four in the 2026 correction)
+    source: https://www.nature.com/articles/s41586-025-09992-y
+  benchmark:
+    material: n/a
+    value: ""
+    source: ""
+    basis: not-applicable
+    gap: Compounds were new to the platform, not necessarily new to science (author correction)
+    tradeoffs: ""
+  ai_role: Autonomous lab + ML synthesis planning
+  evidence: peer-reviewed
+  stage: lab
+  publication: {id: "doi:10.1038/s41586-023-06734-w", url: "https://doi.org/10.1038/s41586-023-06734-w", title: "An autonomous laboratory for the accelerated synthesis of inorganic materials", date: 2023}
+  dispute: {status: corrected, correction: "https://www.nature.com/articles/s41586-025-09992-y", critique: "PRX Energy, Mar 2024 (Leeman, Schoop, Palgrave et al.)", summary: "Author Correction, Nature 650:E1 (19 Jan 2026): novelty narrowed; four compounds removed"}
+  sources: ["https://www.nature.com/articles/d41586-023-03956-w"]
+  verified: 2026-11-19
+  verify: []
+
+# ---------------------------------------------------------------- Delivered, company-reported
+- id: orbital-sorbent
+  name: Data-center carbon capture sorbent
+  orgs: [orbital-industries]
+  material_class: sorbent
+  application: CO2 capture using data-center waste heat
+  what_is_new: Sorbent designed to work in hot exhaust air, where conventional sorbents need cold air
+  key_property:
+    name: Capture cost
+    value: About $200/t CO2 in early UK pilot tests (CEO statement)
+    source: https://www.semafor.com/article/04/09/2025/data-center-in-uk-becomes-proving-ground-for-new-carbon-capture-technology-from-startup-orbital
+  benchmark:
+    material: Direct air capture with sorbents
+    value: Up to $1,000/t
+    source: https://www.semafor.com/article/04/09/2025/data-center-in-uk-becomes-proving-ground-for-new-carbon-capture-technology-from-startup-orbital
+    basis: literature
+    gap: Claimed up to 5x cheaper than sorbent DAC; compound undisclosed, no published data
+    tradeoffs: ""
+  ai_role: Generative design + Orb simulation
+  evidence: company-reported
+  stage: customer-tested
+  sources: ["https://techcrunch.com/2024/12/03/amazon-teams-up-with-orbital-to-remove-co2-from-the-air-at-one-of-its-datacenters", "https://hydrocarbonprocessing.com/news/2026/08/basf-ecms-deploys-ai-materials-discovery-platform-built-by-orbital-industries/"]
+  notes: PFAS-free dielectric coolant is in development (two-phase direct-to-chip system targeted for Q4 2027); not counted as delivered
+  verified: 2026-11-19
+  verify: []
+
+- id: cambium-apexshield-1000
+  name: ApexShield 1000 phthalonitrile resin
+  orgs: [cambium]
+  material_class: polymer
+  application: Carbon-carbon composite parts for hypersonics
+  what_is_new: High-char resin that cuts densification cycles for carbon-carbon parts
+  key_property:
+    name: Polymer infiltration and pyrolysis (PIP) cycles
+    value: 1-2 cycles
+    source: https://www.compositesworld.com/products/high-temp-resin-eliminates-hypersonic-composite-part-bottlenecks
+  benchmark:
+    material: Legacy carbon-carbon resin systems
+    value: 6-9 cycles
+    source: https://www.compositesworld.com/products/high-temp-resin-eliminates-hypersonic-composite-part-bottlenecks
+    basis: head-to-head
+    gap: 70-80% less fabrication time (company-reported)
+    tradeoffs: ""
+  ai_role: AI used "to optimize the processing and production"
+  evidence: company-reported
+  stage: deployed
+  sources: ["https://www.prnewswire.com/news-releases/cambium-launches-new-high-temperature-resin-system-for-aerospace-manufacturers-that-reduces-hypersonic-parts-fabrication-by-70-80-302438000.html"]
+  notes: Not marked bio; no source says ApexShield is bio-derived
+  verified: 2026-11-19
+  verify: [stage]   # commercial launch confirmed; parts in service not confirmed
+
+- id: ses-ai-electrolyte
+  name: Molecular Universe electrolyte (2170 cell)
+  orgs: [ses-ai]
+  material_class: electrolyte
+  application: Li-ion cell electrolyte
+  what_is_new: Electrolyte molecule picked by ML screening; 2 of 17 candidates synthesized and cell-tested
+  key_property:
+    name: Early cycle life
+    value: +20%
+    source: https://developer.nvidia.com/blog/spotlight-accelerating-the-discovery-of-new-battery-materials-with-ses-ais-molecular-universe
+  benchmark:
+    material: Baseline electrolyte in the same cell
+    value: ""
+    source: https://developer.nvidia.com/blog/spotlight-accelerating-the-discovery-of-new-battery-materials-with-ses-ais-molecular-universe
+    basis: internal-baseline
+    gap: 20% longer early cycle life than SES's own baseline
+    tradeoffs: ""
+  ai_role: ML screening of molecules
+  evidence: company-reported
+  stage: customer-tested
+  sources: []
+  verified: 2026-11-19
+  verify: [stage]
+
+- id: kyulux-hyperfluorescence
+  name: Hyperfluorescence TADF materials (Kyumatic program)
+  orgs: [kyulux]
+  material_class: oled
+  application: OLED display emitters
+  what_is_new: TADF materials selected by informatics for red, green and blue Hyperfluorescence devices
+  key_property:
+    name: Efficiency and lifetime
+    value: EQE +20-40%; lifetime up to 10x
+    source: https://www.jst.go.jp/pr/announce/20201104/index_e.html
+  benchmark:
+    material: Start of the JST program
+    value: ""
+    source: https://www.jst.go.jp/pr/announce/20201104/index_e.html
+    basis: internal-baseline
+    gap: Gains vs the program's starting point; the efficiency gain came mainly from co-host layer optimization, so the AI's share is unclear
+    tradeoffs: No material named
+  ai_role: ML + quantum chemistry (Kyumatic, licensed from Harvard)
+  evidence: company-reported
+  stage: customer-tested
+  sources: ["https://www.kyulux.com/jst-features-kyuluxs-kyumatic-ai-system-in-science-publication/"]
+  notes: Weak entry; SK Materials JNC license, mass production target 2027
+  verified: 2026-11-19
+  verify: []
+
+- id: copernic-neptune
+  name: Neptune ammonia synthesis catalyst
+  orgs: [copernic-catalysts, schrodinger]
+  material_class: catalyst
+  application: Haber-Bosch ammonia synthesis (retrofit bed)
+  what_is_new: Base-metal catalyst active at milder conditions than iron; drop-in for existing plants
+  key_property:
+    name: Ammonia yield under real reactor conditions
+    value: More than 2x competing catalysts
+    source: https://www.businesswire.com/news/home/20251030699215/en/
+  benchmark:
+    material: Commercial iron Haber-Bosch catalysts
+    value: ""
+    source: https://www.businesswire.com/news/home/20251030699215/en/
+    basis: head-to-head
+    gap: 2x yield (2025 release); an earlier company figure says 3x under mild conditions. Company claims up to 47% more plant capacity, 23% less energy
+    tradeoffs: ""
+  ai_role: Physics-based simulation + ML + high-throughput experiments
+  evidence: company-reported
+  stage: customer-tested
+  sources: ["https://hydrocarbonprocessing.com/news/2025/10/copernic-catalysts-announces-ammonia-catalyst-milestone-in-research-collaboration-with-schroedinger/"]
+  verified: 2026-11-19
+  verify: []
+
+- id: mitra-chem-lfp
+  name: LFP / LMFP cathode material
+  orgs: [mitra-chem]
+  material_class: battery-cathode
+  application: Li-ion cathode
+  what_is_new: Multi-ton LFP production; LMFP samples shipped to OEMs
+  key_property: {name: "", value: "", source: ""}
+  benchmark:
+    material: Commercial LFP
+    value: ""
+    source: ""
+    basis: none-stated
+    gap: No performance comparison published; the AI's role in the shipped material is not stated
+    tradeoffs: ""
+  ai_role: Physics-informed AI platform
+  evidence: company-reported
+  stage: customer-tested
+  sources: ["https://prnewswire.com/news-releases/mitra-chem-completes-successful-multi-ton-lfp-cam-production-begins-shipping-commercial-samples-to-major-customers-302059017.html"]
+  notes: Weakest entry
+  verified: 2026-11-19
+  verify: []
+
+- id: arzeda-rebm-enzyme
+  name: ProSweet enzymes for Reb M stevia sweetener
+  orgs: [arzeda]
+  material_class: bio
+  bio: true
+  application: Converting abundant Reb A into scarce, sugar-like Reb M
+  what_is_new: Designed enzymes make Reb M (under 1% of the stevia leaf) from Reb A; more than 10 t produced
+  key_property:
+    name: Purity and scale
+    value: 95%+ purity target; >10 t produced
+    source: https://foodbusinessnews.net/articles/27237-cost-effective-reb-m-sweetener-hits-10-ton-production-level
+  benchmark:
+    material: Reb M extracted from stevia leaf
+    value: Under 1% of leaf steviol glycosides (extraction impractical)
+    source: https://www.prnewswire.com/news-releases/arzedas-new-portfolio-of-prosweet-enzymes-unlocks-the-potential-of-stevia-by-efficiently-producing-reb-d-and-m-from-stevia-leaf-extract-301771536.html
+    basis: none-stated
+    gap: Cost advantage claimed, not quantified
+    tradeoffs: ""
+  ai_role: Computational protein design
+  evidence: company-reported
+  stage: deployed
+  sources: ["https://www.businesswire.com/news/home/20241107936695/en/"]
+  verified: 2026-11-19
+  verify: [benchmark.source]   # "<1%" figure is from a USPTO patent document, not Arzeda
+
+- id: chemix-cells
+  name: AI-designed Li-ion cells and electrolytes
+  orgs: [chemix]
+  material_class: electrolyte
+  application: EV and e-motorbike cells
+  what_is_new: Cobalt-free cells designed by AI, built by a contract manufacturer and sold
+  key_property:
+    name: Cycle life
+    value: 1,500 high-temperature cycles or 2,000 fast-charge cycles (electrolyte claims)
+    source: https://www.webwire.com/ViewPressRel.asp?aId=320895
+  benchmark:
+    material: Commercial Li-ion cells
+    value: ""
+    source: ""
+    basis: none-stated
+    gap: No comparison stated
+    tradeoffs: ""
+  ai_role: Generative AI design of electrolyte and cell
+  evidence: company-reported
+  stage: deployed
+  sources: ["https://www.fastcompany.com/90892687/this-startup-uses-ai-to-design-better-ev-batteries"]
+  verified: 2026-11-19
+  verify: []
+
+- id: cambrium-novacoll
+  name: NovaColl skin-identical collagen fragment
+  orgs: [cambrium]
+  material_class: bio
+  bio: true
+  application: Skin-care ingredient (sh-Polypeptide-47)
+  what_is_new: Yeast-fermented, animal-free fragment of collagen I chosen by AI from protein sequence space
+  key_property:
+    name: Procollagen I stimulation (ex vivo)
+    value: Reported increase in aged skin explants; no number public
+    source: https://www.gcimagazine.com/brands-products/skin-care/news/22868700/cambrium-reveals-ex-vivo-efficacy-of-novacoll-shares-future-outlook-on-material-design
+  benchmark:
+    material: Animal-derived collagen ingredients
+    value: ""
+    source: ""
+    basis: none-stated
+    gap: No comparison stated; planned clinical study results not found
+    tradeoffs: ""
+  ai_role: AI selection of the collagen subsegment
+  evidence: company-reported
+  stage: deployed
+  sources: ["https://globenewswire.com/news-release/2023/03/23/2632977/0/en/Cambrium-Launches-NovaColl-First-Micro-Molecular-Skin-Identical-Collagen-Ingredient-for-Personal-Care-Industry.html", "https://www2.brenntag.com/en-emea/co/cambrium-partnership/web/"]
+  verified: 2026-11-19
+  verify: []
+
+- id: mattiq-pem-catalysts
+  name: Low-iridium and Ru-based PEM anode catalysts
+  orgs: [mattiq, heraeus]
+  material_class: catalyst
+  application: PEM water electrolyzer anode
+  what_is_new: Catalysts from combinatorial Megalibrary chips (1M+ materials); Heraeus scaling production
+  key_property:
+    name: Durability in PEM electrolyzers
+    value: 1,000+ h (company)
+    source: https://mattiq.com/
+  benchmark:
+    material: IrO2 anode catalysts
+    value: ""
+    source: ""
+    basis: none-stated
+    gap: Iridium reduction not quantified
+    tradeoffs: ""
+  ai_role: Combinatorial Megalibrary chips + AI
+  evidence: company-reported
+  stage: customer-tested
+  sources: ["https://www.heraeus-precious-metals.com/en/company/press-and-news/mattiq-and-heraeus-partner-to-advance-electrocatalyst-innovation/", "https://www.businesswire.com/news/home/20231003314654/en/Mattiq-Develops-Portfolio-of-Novel-Catalysts-to-Solve-Key-Materials-Challenge-in-the-Global-Scale-Up-of-Clean-Hydrogen"]
+  notes: DOE SBIR report on OSTI is embargoed; founders' Megalibrary papers predate the company
+  verified: 2026-11-19
+  verify: []
+
+# ---------------------------------------------------------------- Lab claims, not published
+- id: radical-ai-rai-939
+  name: RAI-939 refractory alloy
+  orgs: [radical-ai, purdue]
+  material_class: alloy
+  application: Hypersonic leading edges and high-temperature structures
+  what_is_new: Alloy from a self-driving lab that made 300+ alloys in 16 weeks
+  key_property:
+    name: Mass change in a 1-minute torch test
+    value: +0.25% mass
+    source: https://latent.space/wiki/radical-ai-bb801311/
+  benchmark:
+    material: C103 niobium alloy
+    value: 32% mass loss
+    source: https://latent.space/wiki/radical-ai-bb801311/
+    basis: head-to-head
+    gap: Essentially no mass loss vs 32% for C103 (company-reported)
+    tradeoffs: ""
+  ai_role: Self-driving lab
+  evidence: company-reported
+  stage: lab
+  sources: ["https://www.rdworldonline.com/how-radical-ai-is-building-a-self-driving-materials-lab/"]
+  verified: 2026-11-19
+  verify: [key_property.source]   # find a company or Purdue primary source
+
+- id: materials-nexus-magnex
+  name: MagNex rare-earth-free magnet
+  orgs: [materials-nexus]
+  material_class: magnet
+  application: Permanent magnets without rare earths
+  what_is_new: Made and tested with Sheffield / Royce
+  key_property: {name: "", value: "No magnetic data public", source: "https://sheffield.ac.uk/royce-institute/case-studies/matnex-case-study"}
+  benchmark: {material: "NdFeB rare-earth magnets", value: "", source: "", basis: none-stated, gap: "No data", tradeoffs: ""}
+  ai_role: AI materials design
+  evidence: claim
+  stage: lab
+  sources: ["https://sheffield.ac.uk/royce-institute/case-studies/matnex-case-study"]
+  verified: 2026-11-19
+  verify: []
+
+- id: cuspai-kemira-pfas-mofs
+  name: MOF candidates for PFAS removal
+  orgs: [cusp-ai, kemira]
+  material_class: sorbent
+  application: Removing PFAS from drinking water
+  what_is_new: About 20 priority candidates in testing
+  key_property: {name: "", value: "No data", source: "https://news.cision.com/kemira-oyj/r/new-ai-designed-materials-show-promising-potential-to-remove--forever-chemicals--from-drinking-water,c4351166"}
+  benchmark: {material: "Granular activated carbon, ion exchange resins", value: "", source: "", basis: none-stated, gap: "No data", tradeoffs: ""}
+  ai_role: Generative design
+  evidence: claim
+  stage: lab
+  sources: ["https://news.cision.com/kemira-oyj/r/new-ai-designed-materials-show-promising-potential-to-remove--forever-chemicals--from-drinking-water,c4351166"]
+  verified: 2026-11-19
+  verify: []
+
+- id: microsoft-discovery-coolant
+  name: Non-PFAS immersion coolant
+  orgs: [microsoft]
+  material_class: fluid
+  application: Data-center immersion cooling
+  what_is_new: 367K candidates screened in 200 h; synthesized by a partner; GPU demo
+  key_property: {name: "", value: "No property data published", source: "https://azure.microsoft.com/blog/transforming-rd-with-agentic-ai-introducing-microsoft-discovery"}
+  benchmark: {material: "PFAS coolants (3M Novec, exited 2024)", value: "", source: "", basis: none-stated, gap: "No data", tradeoffs: ""}
+  ai_role: Agentic AI + HPC screening
+  evidence: company-reported
+  stage: lab
+  sources: ["https://azure.microsoft.com/blog/transforming-rd-with-agentic-ai-introducing-microsoft-discovery"]
+  verified: 2026-11-19
+  verify: []
+
+- id: eneos-methanol-catalyst
+  name: Methanol synthesis catalyst (Matlantis)
+  orgs: [eneos]
+  material_class: catalyst
+  application: Methanol synthesis
+  what_is_new: Catalyst said to "significantly outperform" existing ones
+  key_property: {name: "", value: "No composition or data", source: "https://www.eneos.co.jp/english/rd/research/digital/mi.html"}
+  benchmark: {material: "Existing methanol catalysts", value: "", source: "", basis: none-stated, gap: "Qualitative claim only", tradeoffs: ""}
+  ai_role: Universal ML interatomic potential (Matlantis)
+  evidence: claim
+  stage: lab
+  sources: ["https://www.eneos.co.jp/english/rd/research/digital/mi.html"]
+  verified: 2026-11-19
+  verify: []
+
+- id: polyfos-print-material
+  name: Polyfos insoluble 3D-printing material
+  orgs: [polyfos, materialszone]
+  material_class: polymer
+  application: Dual-material 3D printing
+  what_is_new: Hardness raised and process tuned in 12 AI-guided experiments
+  key_property: {name: Hardness, value: "5x", source: "https://www.chemengonline.com/advancing-additive-manufacturing-using-data-visualization-and-ai"}
+  benchmark: {material: "Polyfos's prior formulation", value: "", source: "https://www.chemengonline.com/advancing-additive-manufacturing-using-data-visualization-and-ai", basis: internal-baseline, gap: "5x harder than its own earlier material (vendor trade article)", tradeoffs: ""}
+  ai_role: AI-guided experiment design (MaterialsZone platform)
+  evidence: company-reported
+  stage: lab
+  sources: []
+  verified: 2026-11-19
+  verify: []

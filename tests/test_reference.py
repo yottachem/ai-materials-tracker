@@ -1,0 +1,42 @@
+import os
+
+import pytest
+
+from tracker import registry
+
+
+def test_registry_rules():
+    assert registry.problems() == []
+
+
+def test_every_material_has_a_comparison_basis():
+    for m in registry.materials():
+        assert m["benchmark"]["basis"] in registry.BASES, m["id"]
+
+
+def test_published_entries_cite_a_paper():
+    for m in registry.materials():
+        if m["evidence"] in ("peer-reviewed", "preprint"):
+            assert m["publication"]["url"].startswith("https://"), m["id"]
+
+
+def test_watch_orgs_have_no_material():
+    watch = {o["id"] for o in registry.orgs() if o.get("watch")}
+    for m in registry.materials():
+        assert not watch & set(m["orgs"]), m["id"]
+
+
+def test_rules_catch_errors():
+    mats = [{"id": "x", "name": "X", "orgs": ["nobody"], "material_class": "alloy", "application": "a",
+             "what_is_new": "w", "ai_role": "r", "evidence": "peer-reviewed", "stage": "lab", "verified": "2026-11-19",
+             "benchmark": {"basis": "literature", "material": "Y"}}]
+    found = registry.problems(mats, [])
+    assert any("not in orgs.yaml" in p for p in found)
+    assert any("needs publication" in p for p in found)
+    assert any("needs a gap" in p for p in found)
+    assert any("needs its own source" in p for p in found)
+
+
+@pytest.mark.skipif(not os.environ.get("LAUNCH_GATE"), reason="launch gate runs with LAUNCH_GATE=1")
+def test_launch_gate():
+    assert registry.launch_problems() == []
