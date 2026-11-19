@@ -1,8 +1,9 @@
 name: update
 # Weekly (plan 2026-11-19): SEC filings -> federal awards -> public-company financials -> news -> acceptance rules
 # -> OpenAlex papers, journal versions, critiques -> Crossref corrections -> patents (quarterly: --if-due skips until the
-# last full run is 85 days old) -> test -> commit data. No job boards.
-# Scheduled runs need repo variable SCHEDULE_ON=true. Not live: the repo has no remote until Josh approves.
+# last full run is 85 days old) -> check statements -> test -> commit data. No job boards.
+# Then: build site -> deploy to GitHub Pages. A push to main skips ingest and rebuilds the site.
+# Scheduled runs need repo variable SCHEDULE_ON=true; deploys need PAGES_LIVE=true.
 # Secrets: CONTACT_EMAIL (SEC User-Agent, OpenAlex and Crossref polite pools), OPENALEX_API_KEY, USPTO_ODP_API_KEY.
 # Never written to the repo.
 on:
@@ -13,10 +14,14 @@ on:
       news_days:
         description: "News lookback in days"
         default: "8"
+  push:
+    branches: [main]
 
 permissions:
   contents: write
   issues: write
+  pages: write
+  id-token: write
 
 concurrency:
   group: update
@@ -34,34 +39,74 @@ jobs:
       USPTO_ODP_API_KEY: ${{ secrets.USPTO_ODP_API_KEY }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # the status page dates each curated file from git history
       - uses: astral-sh/setup-uv@v5
       - name: SEC filings
+        if: github.event_name != 'push'
         run: uv run python -m ingest.filings --since "$(date -u -d '21 days ago' +%F)"
       - name: Federal awards (USAspending)
+        if: github.event_name != 'push'
         run: uv run python -m ingest.awards
       - name: Public-company financials (EDGAR XBRL)
+        if: github.event_name != 'push'
         run: uv run python -m ingest.financials
       - name: News
+        if: github.event_name != 'push'
         run: uv run python -m ingest.news --sources bing,gnews,newsroom --days "${{ inputs.news_days || '8' }}"
       - name: Acceptance rules
+        if: github.event_name != 'push'
         run: uv run python -m classify.accept
       - name: Papers, journal versions, critiques
+        if: github.event_name != 'push'
         run: uv run python -m ingest.openalex --since "$(date -u -d '28 days ago' +%F)"
       - name: Crossref corrections
+        if: github.event_name != 'push'
         run: uv run python -m ingest.crossref
       - name: Patents (quarterly)
+        if: github.event_name != 'push'
         run: uv run python -m ingest.patents --if-due
+      - name: Check statements
+        run: uv run python -m analysis.claims
       - name: Test
+        id: test
         run: uv run pytest -q
       - name: Commit data
+        if: github.event_name != 'push'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
           git add data/news data/review data/papers data/awards data/patents data/public reference/ledger.csv
           if git diff --cached --quiet; then echo "No data changes"; exit 0; fi
           git commit -m "Data update $(date -u +%F)"
-          git pull --rebase
+          git pull --rebase   # main may have moved during the run (registry edits)
           git push
+      - name: Build site
+        if: always() && steps.test.outcome == 'success'
+        run: uv run python site/build.py
+      - uses: actions/upload-pages-artifact@v3
+        if: always() && steps.test.outcome == 'success'
+        with:
+          path: site/dist
+      - name: Open an issue for statements under review
+        if: always() && github.event_name == 'schedule' && hashFiles('analysis/results/review.json') != ''
+        run: |
+          uv run python -m analysis.claims --markdown > review.md
+          open=$(gh issue list -R "$GITHUB_REPOSITORY" --state open --search "Statements under review in:title" --json number --jq length)
+          if [ -s review.md ] && [ "$open" = "0" ]; then
+            gh issue create -R "$GITHUB_REPOSITORY" --title "Statements under review $(date -u +%F)" --body-file review.md
+          fi
       - name: Open an issue if the run fails
         if: failure() && github.event_name == 'schedule'
         run: gh issue create -R "$GITHUB_REPOSITORY" --title "Update failed $(date -u +%F)" --body "See ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+  deploy:
+    needs: update
+    if: vars.PAGES_LIVE == 'true'
+    runs-on: ubuntu-24.04
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

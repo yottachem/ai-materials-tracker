@@ -168,6 +168,13 @@ def launch_problems() -> list[str]:
     for o in chart_orgs():
         if o["funding"]["tier"] != "tier1":
             out.append(f"{o['id']}: chart funding not tier-1 sourced")
+    import csv  # the review queue must be empty at launch (plan, Phase 5)
+    queue = ROOT / "data" / "review" / "queue.csv"
+    if queue.exists():
+        with queue.open(newline="") as fh:
+            n = sum(r["status"] == "open" for r in csv.DictReader(fh))
+        if n:
+            out.append(f"review queue: {n} open item(s)")
     return out
 
 

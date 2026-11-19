@@ -527,11 +527,11 @@ materials:
     basis: none-stated
     gap: Cost advantage claimed, not quantified
     tradeoffs: ""
-  ai_role: Computational protein design
+  ai_role: AI-driven protein design; the company calls ViaLeaf Reb M "the first ever product enabled by AI-driven protein design to reach the market" and does not say which model or design step
   method: not-stated
   evidence: company-reported
   stage: deployed
-  sources: ["https://www.businesswire.com/news/home/20241107936695/en/"]
+  sources: ["https://www.businesswire.com/news/home/20241107936695/en/", "https://www.arzeda.com/news/MANE-EXPANDS-PARTNERSHIP-WITH-ARZEDA"]
   verified: 2026-11-19
   verify: []
 
