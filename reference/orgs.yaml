@@ -11,8 +11,8 @@ orgs:
 
 # ---------------------------------------------------------------- Organizations with a material
 - {id: lila-sciences, name: Lila Sciences, type: company, hq: "Cambridge, MA",
-   funding: {low: 550, high: 550, tier: aggregator, note: "$200M seed Mar 2025 + $350M Series A Oct 2025. Reuters exclusive seen only as a syndicated copy; reuters.com URL not yet verified"},
-   sources: ["https://finance.yahoo.com/news/exclusive-ai-lab-lila-sciences-101645837.html"]}
+   funding: {low: 550, high: 550, tier: tier1, note: "$200M seed Mar 2025 + $350M Series A Oct 2025 ($550M total, Reuters; reuters.com link verified by Josh 2026-11-19)"},
+   sources: ["https://www.reuters.com/technology/artificial-intelligence/ai-lab-lila-sciences-tops-13-billion-valuation-with-new-nvidia-backing-2025-10-14/"]}
 - {id: atinary, name: Atinary, type: company, hq: "Lausanne, Switzerland",
    funding: {low: 5, high: 9.8, tier: aggregator, note: "$5M seed (AgFunder release); CB Insights lists $9.8M"},
    sources: ["https://agfundernews.com/atinary-technologies-raises-5m-seed-round-to-turbocharge-rd-process"]}
