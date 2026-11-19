@@ -320,6 +320,31 @@ materials:
   verify: []
 
 # ---------------------------------------------------------------- Delivered, company-reported
+- id: berkeley-nasicon-conductors
+  name: Multicomponent NASICON sodium-ion conductors (A-Lab CASS)
+  orgs: [berkeley-lab]
+  material_class: electrolyte
+  application: Solid-state sodium battery electrolyte
+  what_is_new: Physics-informed cost functions steered the A-Lab through a multi-cation NASICON space; 18 compositions in 78 trials, best Na3.4Hf0.8Zr0.8In0.3Ga0.1(SiO4)2(PO4)
+  key_property:
+    name: Room-temperature Na-ion conductivity
+    value: 0.7 mS/cm total (3.96 mS/cm bulk); second composition 0.3 mS/cm total (3.17 bulk)
+    source: https://arxiv.org/abs/2609.29344
+  benchmark:
+    material: Na3.4Zr2Si2.4P0.6O12 (Ma et al. 2019; cited by the paper as state of the art)
+    value: 5 mS/cm total, 15 mS/cm bulk at 25 C
+    source: https://doi.org/10.1039/C9TA00048H
+    basis: literature
+    gap: About 7x lower total and 4x lower bulk conductivity; the paper's "comparable" sets its bulk value against the benchmark's total
+    tradeoffs: Densification and sintering not yet optimized (authors)
+  ai_role: Self-driving lab (A-Lab) + physics-informed cost functions (CASS)
+  evidence: preprint
+  stage: lab
+  publication: {id: "arXiv:2609.29344", url: "https://arxiv.org/abs/2609.29344", title: "Combining physical models with dynamically acquired experimental information for the optimization of multicomponent NASICON fast ionic conductors in a self-driving laboratory", date: 2026-09-24}
+  sources: []
+  verified: 2026-11-19
+  verify: []
+
 - id: orbital-sorbent
   name: Data-center carbon capture sorbent
   orgs: [orbital-industries]

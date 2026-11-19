@@ -1,0 +1,10 @@
+{% macro ev(key, EVIDENCE) %}<span class="chip ev-{{ key }}">{{ EVIDENCE[key] }}</span>{% endmacro %}
+{% macro st(key, STAGE) %}<span class="chip st-{{ key }}">{{ STAGE[key] }}</span>{% endmacro %}
+{% macro basis(key, BASIS, BASIS_NOTE) %}<span class="chip b-{{ key }}" title="{{ BASIS_NOTE[key] }}">{{ BASIS[key] }}</span>{% endmacro %}
+{% macro dispute(r) %}{% if r.dispute %}<span class="chip dis">{{ r.dispute }}</span>{% endif %}{% endmacro %}
+{% macro mat(r, up="") %}<span class="mat"><a href="{{ up }}material/{{ r.id }}.html">{{ r.m.name }}</a></span>{% endmacro %}
+{% macro org(o, orecs, up="") %}{% if orecs[o.id].page %}<a href="{{ up }}org/{{ o.id }}.html">{{ o.name }}</a>{% else %}{{ o.name }}{% endif %}{% endmacro %}
+{% macro orgs(r, orecs, up="") %}{% for o in r.orgs %}{{ org(o, orecs, up) }}{{ ", " if not loop.last }}{% endfor %}{% endmacro %}
+{% macro src(url) %}{% if url %}<span class="src"><a href="{{ url }}">{{ url | host }}</a></span>{% endif %}{% endmacro %}
+{% macro sources(row) %}<span class="src">{% for l in row.links %}<a href="{{ l.url }}">{{ l.host }}</a>{% endfor %}</span>{% endmacro %}
+{% macro funding(f) %}{% if f.low == f.high %}{{ f.low | fmt("musd") }}{% else %}{{ f.low | fmt("musd") }} to {{ f.high | fmt("musd") }}{% endif %}{% endmacro %}

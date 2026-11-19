@@ -1,0 +1,84 @@
+{% extends "base.html.j2" %}
+{% import "_macros.html.j2" as m %}
+{% set o = r.o %}
+{% block path %}org/{{ r.id }}.html{% endblock %}
+{% block title %}{{ o.name }}{% endblock %}
+{% block description %}{{ o.name }}: AI-made materials, funding, federal awards, papers and patents, each with its source.{% endblock %}
+{% block body %}
+<p><span class="pill">{{ r.type }}</span></p>
+<h1>{{ o.name }}</h1>
+<p class="sub">{% if o.hq %}{{ o.hq }}{% endif %}{% if o.former_names %} · formerly {{ o.former_names | join(", ") }}{% endif %}</p>
+{% if r.watch %}<p class="watch-promote"><b>On the watch list: {{ r.watch[0] | lower }}.</b> {{ r.watch[1] }}. It moves onto the materials list with {{ r.watch[2] | lower }}.</p>{% endif %}
+
+<div class="figs">
+  <div class="fig"><b>{{ r.materials | length }}</b><span>material{{ "" if r.materials | length == 1 else "s" }} on the tracker</span></div>
+  {% if r.funding %}<div class="fig"><b>{{ m.funding(r.funding) }}</b><span>{% if r.funding.tier == "tier1" %}disclosed equity (tier-1 sources){% else %}reported equity, not yet confirmed by a tier-1 source{% endif %}</span></div>{% endif %}
+  {% if r.awards %}<div class="fig"><b>{{ r.awards_total | fmt("usd") }}</b><span>federal awards ({{ r.awards | length }}), not counted as equity</span></div>{% endif %}
+  {% if r.patents_n %}<div class="fig"><b>{{ r.patents_scope }}</b><span>US patent filings on materials ({{ r.patents_n }} in all)</span></div>{% endif %}
+</div>
+{% if r.revenue or r.cash %}
+<p class="sub">From SEC filings: {% if r.revenue %}revenue {{ r.revenue.value | float | fmt("usd") }} in {{ r.revenue.frame[2:] }}{% endif %}{% if r.revenue and r.cash %}; {% endif %}{% if r.cash %}cash {{ r.cash.value | float | fmt("usd") }} at {{ r.cash.end }}{% endif %}.</p>
+{% endif %}
+{% if r.funding %}<p class="sub">Funding: {{ r.funding.note or "" }} {{ m.sources({"links": r.funding_sources}) }}</p>{% endif %}
+
+{% if r.materials %}
+<h2>Materials</h2>
+<div class="tw"><table>
+<thead><tr><th>Material</th><th>Grade</th><th>Result</th><th>Basis</th></tr></thead>
+<tbody>
+{% for x in r.materials %}<tr><td>{{ m.mat(x, up) }}<span class="meta">{{ x.cls }}</span></td><td><div class="chips">{{ m.ev(x.m.evidence, EVIDENCE) }}{{ m.st(x.m.stage, STAGE) }}{{ m.dispute(x) }}</div></td><td>{{ x.m.key_property.value or "Not disclosed" }}</td><td>{{ m.basis(x.b.basis, BASIS, BASIS_NOTE) }}</td></tr>{% endfor %}
+</tbody></table></div>
+{% endif %}
+
+{% if r.rows %}
+<h2>Events</h2>
+<div class="tw"><table>
+<thead><tr><th>Date</th><th>Type</th><th class="n">Amount</th><th>Detail</th><th>Sources</th></tr></thead>
+<tbody>
+{% for e in r.rows %}<tr><td class="d">{{ e.date }}</td><td>{{ e.type_label }}{% if e.round %}<span class="meta">{{ e.round }}</span>{% endif %}</td><td class="n">{% if e.amount %}{{ e.amount | fmt("usd") }}{% else %}<span class="muted">–</span>{% endif %}</td><td class="detail">{{ e.shown }}</td><td>{{ m.sources(e) }}</td></tr>{% endfor %}
+</tbody></table></div>
+{% endif %}
+
+{% if r.papers %}
+<h2>Papers</h2>
+<p class="sub">Works by this organization in OpenAlex whose title or abstract names both an AI or ML method and a material ({{ r.papers | length }}).</p>
+<div class="tw"><table>
+<thead><tr><th>Date</th><th>Title</th><th>Venue</th></tr></thead>
+<tbody>
+{% for p in r.papers[:15] %}<tr><td class="d">{{ p.date }}</td><td class="hl">{% if p.doi %}<a href="{{ p.doi }}">{{ p.title }}</a>{% else %}{{ p.title }}{% endif %}</td><td>{{ p.venue or p.type }}</td></tr>{% endfor %}
+</tbody></table></div>
+{% endif %}
+
+{% if r.patents_n %}
+<h2>Patents</h2>
+<p class="sub">US applications and grants naming this organization (USPTO). Materials filings are those classed in materials patent groups (catalysts, ceramics, polymers, coatings, alloys, batteries and similar); {{ r.patents_granted }} of all filings have been granted.</p>
+<div class="tw"><table>
+<thead><tr><th>Filed</th>{% for y, n in r.patent_years %}<th class="n">{{ y }}</th>{% endfor %}</tr></thead>
+<tbody><tr><td>Filings</td>{% for y, n in r.patent_years %}<td class="n">{{ n }}</td>{% endfor %}</tr></tbody></table></div>
+{% if r.patents_recent %}
+<details><summary>Recent materials filings</summary>
+<div class="tw"><table><thead><tr><th>Filed</th><th>Title</th><th>Status</th></tr></thead><tbody>
+{% for p in r.patents_recent %}<tr><td class="d">{{ p.filing_date }}</td><td>{{ p.title | title }}</td><td>{{ p.patent and "Granted " ~ p.patent or p.publication or p.status }}</td></tr>{% endfor %}
+</tbody></table></div></details>
+{% endif %}
+{% endif %}
+
+{% if r.awards %}
+<h2>Federal awards</h2>
+<p class="sub">Grants and contracts from USAspending. Non-dilutive: never added to equity.</p>
+<div class="tw"><table>
+<thead><tr><th>Start</th><th>Agency</th><th class="n">Amount</th><th>Award</th></tr></thead>
+<tbody>
+{% for a in r.awards %}<tr><td class="d">{{ a.start }}</td><td>{{ a.sub_agency or a.agency }}</td><td class="n">{{ a.amount_usd | float | fmt("usd") }}</td><td class="hl"><a href="{{ a.url }}">{{ a.title | truncate(110) }}</a></td></tr>{% endfor %}
+</tbody></table></div>
+{% endif %}
+
+{% if r.news %}
+<h2>Headlines</h2>
+<div class="tw"><table>
+<thead><tr><th>Date</th><th>Headline</th><th>Publisher</th></tr></thead>
+<tbody>
+{% for a in r.news %}<tr><td class="d">{{ a.date }}</td><td class="hl"><a href="{{ a.url }}">{{ a.title }}</a></td><td>{{ a.publisher or a.domain }}{% if a.tier == "tier1" %} <span class="tag">tier 1</span>{% endif %}</td></tr>{% endfor %}
+</tbody></table></div>
+{% endif %}
+{% endblock %}

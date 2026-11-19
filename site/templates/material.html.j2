@@ -1,0 +1,47 @@
+{% extends "base.html.j2" %}
+{% import "_macros.html.j2" as m %}
+{% set x = r.m %}
+{% block path %}material/{{ r.id }}.html{% endblock %}
+{% block title %}{{ x.name }}{% endblock %}
+{% block description %}{{ x.name }}: {{ r.evidence | lower }}, {{ r.stage | lower }}. Headline property, benchmark and evidence trail with sources.{% endblock %}
+{% block body %}
+<div class="chips">{{ m.ev(x.evidence, EVIDENCE) }}{{ m.st(x.stage, STAGE) }}{{ m.dispute(r) }}<span class="chip b-not-applicable">{{ r.cls }}</span></div>
+<h1>{{ x.name }}</h1>
+<p class="lede">{{ x.application | trim(".") }}. {{ x.what_is_new | trim(".") }}.</p>
+<p class="sub">{{ m.orgs(r, orecs, up) }}</p>
+
+<div class="cmp">
+  <div><h3>This material: {{ x.key_property.name }}</h3><div class="v">{{ x.key_property.value or "Not disclosed" }}</div>{% if x.key_property.source %}<div class="w">{{ m.src(x.key_property.source) }}</div>{% endif %}</div>
+  <div><h3>Benchmark</h3>{% if r.b.basis == "none-stated" %}<div class="v muted">None stated</div><div class="w">{{ r.b.material or "No quantitative comparison found in the sources." }}</div>{% else %}<div class="v">{{ r.b.material }}</div>{% if r.b.value %}<div class="w">{{ r.b.value }}</div>{% endif %}{% if r.b.source %}<div class="w">{{ m.src(r.b.source) }}</div>{% endif %}{% endif %}</div>
+  <div class="gap"><h3>Comparison</h3><div class="chips">{{ m.basis(r.b.basis, BASIS, BASIS_NOTE) }} <span class="muted">{{ r.basis_note }}</span></div>
+    {% if r.b.gap %}<div class="w"><b>Gap:</b> {{ r.b.gap }}</div>{% endif %}
+    {% if r.b.tradeoffs %}<div class="w"><b>Tradeoffs:</b> {{ r.b.tradeoffs }}</div>{% endif %}</div>
+</div>
+
+<h2>What the AI did</h2>
+<p class="prose">{{ x.ai_role }}</p>
+
+<h2>Evidence trail</h2>
+{% if r.dispute %}<p class="sub">This result is <b>{{ r.dispute | lower }}</b>. Both the original and the response are linked; the tracker does not judge between them.</p>{% endif %}
+<ul class="trail">
+{% for t in r.trail %}<li><span class="what">{{ t.what }}</span> {% if t.url %}<a href="{{ t.url }}">{{ t.label }}</a>{% else %}{{ t.label }}{% endif %}{% if t.note %} <span class="muted">({{ t.note }})</span>{% endif %}</li>{% endfor %}
+</ul>
+
+<h2>Grade history</h2>
+<p class="sub">Evidence and stage change only through a dated ledger entry with a source.</p>
+<div class="tw"><table>
+<thead><tr><th>Date</th><th>Grade</th><th>Detail</th><th>Sources</th></tr></thead>
+<tbody>
+{% for g in r.grades %}<tr><td class="d">{{ g.date }}</td><td>{{ g.type_label }}: {{ EVIDENCE.get(g.grade) or STAGE.get(g.grade) or g.grade }}</td><td class="detail">{{ g.shown }}</td><td>{{ m.sources(g) }}</td></tr>{% endfor %}
+</tbody></table></div>
+
+{% if r.events %}
+<h2>Events</h2>
+<div class="tw"><table>
+<thead><tr><th>Date</th><th>Type</th><th class="n">Amount</th><th>Detail</th><th>Sources</th></tr></thead>
+<tbody>
+{% for e in r.events %}<tr><td class="d">{{ e.date }}</td><td>{{ e.type_label }}</td><td class="n">{% if e.amount %}{{ e.amount | fmt("usd") }}{% else %}<span class="muted">–</span>{% endif %}</td><td class="detail">{{ e.shown }}</td><td>{{ m.sources(e) }}</td></tr>{% endfor %}
+</tbody></table></div>
+{% endif %}
+<p class="note-p">Last verified {{ x.verified }}.</p>
+{% endblock %}

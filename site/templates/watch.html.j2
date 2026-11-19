@@ -1,0 +1,22 @@
+{% extends "base.html.j2" %}
+{% import "_macros.html.j2" as m %}
+{% block path %}watch.html{% endblock %}
+{% block title %}Watch list{% endblock %}
+{% block description %}Organizations in AI-driven materials with no qualifying material yet, and what would put each on the list.{% endblock %}
+{% block body %}
+<h1>Watch list</h1>
+<p class="lede">{{ n }} organizations working on AI for materials that have no qualifying material on the tracker yet. Each group says what would move an organization onto the materials list. The weekly run watches their papers, filings and news for exactly that.</p>
+{% for g in groups %}{% if g.rows %}
+<section>
+<h2 id="{{ g.key }}">{{ g.label }} <small class="muted">({{ g.rows | length }})</small></h2>
+<p class="sub">{{ g.why }}.</p>
+<p class="watch-promote"><b>Moves onto the list with:</b> {{ g.promote | lower }}.</p>
+<div class="tw"><table>
+<thead><tr><th>Organization</th><th>Type</th><th>HQ</th><th class="n">Disclosed equity</th><th>Note</th></tr></thead>
+<tbody>
+{% for r in g.rows %}<tr><td class="co">{% if r.page %}<a href="org/{{ r.id }}.html">{{ r.o.name }}</a>{% else %}{{ r.o.name }}{% endif %}</td><td>{{ r.type }}</td><td>{{ r.o.hq or "–" }}</td><td class="n">{% if r.funding and r.funding.tier == "tier1" %}{{ m.funding(r.funding) }}{% elif r.funding %}<span class="muted" title="Aggregator only">{{ m.funding(r.funding) }}*</span>{% else %}<span class="muted">–</span>{% endif %}</td><td class="detail">{{ r.o.note or "" }}</td></tr>{% endfor %}
+</tbody></table></div>
+</section>
+{% endif %}{% endfor %}
+<p class="note-p">* Reported by aggregators only; not yet confirmed by a tier-1 source.</p>
+{% endblock %}

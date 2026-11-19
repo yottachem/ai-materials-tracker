@@ -23,12 +23,12 @@ orgs:
 - {id: pnnl, name: Pacific Northwest National Laboratory, type: academic, hq: "Richland, WA"}
 - {id: siat, name: Shenzhen Institutes of Advanced Technology, type: academic, hq: "Shenzhen, China"}
 - {id: google-deepmind, name: Google DeepMind, type: corporate-lab, hq: "London, UK"}
-- {id: harvard, name: Harvard University (Aspuru-Guzik group, 2016), type: academic, hq: "Cambridge, MA"}
+- {id: harvard, name: "Harvard University (Aspuru-Guzik group, 2016)", type: academic, hq: "Cambridge, MA"}
 - {id: samsung, name: Samsung Advanced Institute of Technology, type: corporate-lab, hq: "Suwon, South Korea"}
 - {id: u-liverpool, name: University of Liverpool (Cooper group), type: academic, hq: "Liverpool, UK"}
 - {id: argonne, name: Argonne National Laboratory (Polybot), type: academic, hq: "Lemont, IL"}
 - {id: u-toronto, name: University of Toronto (Zou lab; Acceleration Consortium), type: academic, hq: "Toronto, Canada"}
-- {id: nc-state, name: NC State University (Abolhasani, PoLARIS), type: academic, hq: "Raleigh, NC"}
+- {id: nc-state, name: "NC State University (Abolhasani, PoLARIS)", type: academic, hq: "Raleigh, NC"}
 - {id: berkeley-lab, name: Lawrence Berkeley National Laboratory (A-Lab), type: academic, hq: "Berkeley, CA"}
 - {id: orbital-industries, name: Orbital Industries, former_names: [Orbital Materials], type: company, hq: "London, UK",
    funding: {low: 21, high: 21, tier: tier1, note: "$21M through Series A (company). Not counted: $50M Series B May 2026, Fortune exclusive only (tier 2)"},

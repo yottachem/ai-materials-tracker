@@ -50,3 +50,12 @@ def test_chart_plots_tier1_only():
           {"id": "d", "type": "company"}]
     assert [o["id"] for o in registry.chart_orgs(fx)] == ["a"]
     assert [o["id"] for o in registry.unconfirmed_funding_orgs(fx)] == ["b"]
+
+
+ORG_KEYS = {"id", "name", "type", "hq", "watch", "note", "funding", "sources", "ticker", "bio", "former_names", "verify"}
+
+
+def test_org_keys_are_known():
+    """Catches flow-YAML entries split by an unquoted comma (a name like "X (a, b)" becomes a stray key)."""
+    for o in registry.orgs():
+        assert set(o) <= ORG_KEYS, (o["id"], set(o) - ORG_KEYS)

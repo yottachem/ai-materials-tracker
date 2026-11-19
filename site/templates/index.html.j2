@@ -1,0 +1,81 @@
+{% extends "base.html.j2" %}
+{% import "_macros.html.j2" as m %}
+{% block path %}{% endblock %}
+{% block title %}Proof Tracker{% endblock %}
+{% block body %}
+<h1>Which AI-made materials are proven, and against what</h1>
+<p class="lede">{{ figs.materials }} materials made with AI or machine learning, from {{ figs.orgs }} companies and labs. Each is graded by the evidence behind it and the stage it has reached, and set beside the best existing material it would replace.</p>
+<div class="figs">
+  <div class="fig"><b>{{ figs.materials }}</b><span>materials tracked</span></div>
+  <div class="fig"><b>{{ figs.published }}</b><span>with a paper (peer-reviewed or preprint)</span></div>
+  <div class="fig"><b>{{ figs.deployed }}</b><span>deployed at production scale</span></div>
+  <div class="fig"><b>{{ figs.compared }}</b><span>compared with the field's best or an incumbent</span></div>
+</div>
+
+{% set shown = claims.market | default([]) | selectattr("html") | list %}
+{% if shown %}
+<h2>What the evidence says</h2>
+<p class="sub">Each statement is re-checked against the data on every build. When the data stops supporting one, it is replaced with the plain numbers and marked under review until it is rewritten.</p>
+<ul class="claims">
+{% for c in shown %}
+<li>{{ c.html | safe }}{% if c.status != "ok" %} <span class="flag">under review</span>{% endif %}{% if preview %}<br><code class="cond">holds: {{ c.holds }}</code>{% endif %}</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+<h2>Evidence ladder</h2>
+<p class="sub">Rows: what the evidence is. Columns: how far the material has gone. A material moves only through a dated, sourced ledger entry; the most recent moves are listed below.</p>
+<div class="tw"><table class="ladder">
+<thead><tr><th>Evidence</th>{% for s in stages %}<th>{{ s }}</th>{% endfor %}</tr></thead>
+<tbody>
+{% for row in ladder %}
+<tr><th scope="row">{{ row.label }}</th>
+{% for cell in row.cells %}<td{% if not cell %} class="empty"{% endif %}>{% if cell %}<ul>{% for r in cell %}<li>{{ m.mat(r) }}{% if r.dispute %} {{ m.dispute(r) }}{% endif %}</li>{% endfor %}</ul>{% else %}–{% endif %}</td>{% endfor %}
+</tr>
+{% endfor %}
+</tbody></table></div>
+
+<h2>Against the best existing material</h2>
+<p class="sub">Each material's headline property beside the benchmark it was compared with. The basis says how fair the comparison is: <b>head-to-head</b> and <b>literature</b> compare with the field's best; an <b>internal baseline</b> or <b>design target</b> compares with the authors' own starting point; <b>none stated</b> means no quantitative comparison was found.</p>
+<div class="tw"><table>
+<thead><tr><th>Material</th><th>Result</th><th>Benchmark</th><th>Basis</th><th>Gap</th></tr></thead>
+<tbody>
+{% for r in board %}
+<tr><td>{{ m.mat(r) }}<span class="meta">{{ r.cls }} · {{ r.evidence }} · {{ r.stage }}</span></td>
+<td>{{ r.m.key_property.value or "Not disclosed" }}</td>
+<td>{% if r.b.basis == "none-stated" %}<span class="muted">{{ r.b.material or "None stated" }}</span>{% else %}{{ r.b.material }}{% if r.b.value %}<span class="meta">{{ r.b.value }}</span>{% endif %}{% endif %}</td>
+<td>{{ m.basis(r.b.basis, BASIS, BASIS_NOTE) }}</td>
+<td class="detail">{{ r.b.gap or "–" }}</td></tr>
+{% endfor %}
+</tbody></table></div>
+
+<h2>Funding and evidence</h2>
+<p class="sub">Venture-backed companies by disclosed equity, placed on the row of their strongest material. Equity counts only when a tier-1 source (the company, a wire, a filing or a major outlet) states it; grants and debt are excluded. Fill shows stage; a dashed open circle means no material on the tracker yet.</p>
+<div class="key"><span><i class="k-st0"></i> Lab</span><span><i class="k-st1"></i> Customer-tested</span><span><i class="k-st2"></i> Deployed</span><span><i class="k-stn"></i> No material yet</span></div>
+<div class="cw">{{ funding_svg | safe }}</div>
+<details><summary>Table view</summary>
+<div class="tw"><table>
+<thead><tr><th>Company</th><th class="n">Disclosed equity</th><th>Strongest evidence</th><th>Detail</th></tr></thead>
+<tbody>
+{% for p in funding_table %}<tr><td class="co"><a href="{{ p.href }}">{{ p.name }}</a></td><td class="n">{{ p.x | fmt("musd") }}</td><td>{{ p.row }}</td><td class="detail">{{ p.tip }}</td></tr>{% endfor %}
+</tbody></table></div>
+</details>
+{% if unconfirmed %}
+<h3>Funding not yet confirmed by a tier-1 source</h3>
+<p class="sub">These figures come only from aggregators or secondary reporting, so they are listed here and left off the chart until a primary source confirms them.</p>
+<div class="tw"><table>
+<thead><tr><th>Company</th><th class="n">Reported equity</th><th>What the sources say</th><th>Sources</th></tr></thead>
+<tbody>
+{% for u in unconfirmed %}<tr><td class="co">{% if u.r.page %}<a href="org/{{ u.o.id }}.html">{{ u.o.name }}</a>{% else %}{{ u.o.name }}{% endif %}</td><td class="n">{{ m.funding(u.o.funding) }}</td><td class="detail">{{ u.o.funding.note or "–" }}</td><td>{{ m.sources({"links": u.r.funding_sources}) }}</td></tr>{% endfor %}
+</tbody></table></div>
+{% endif %}
+
+<h2>Recent grade changes</h2>
+{% if changes %}
+<div class="tw"><table>
+<thead><tr><th>Date</th><th>Material</th><th>Change</th><th>Why</th><th>Sources</th></tr></thead>
+<tbody>
+{% for c in changes %}<tr><td class="d">{{ c.date }}</td><td>{% if c.mrec %}{{ m.mat(c.mrec) }}{% else %}{{ c.material }}{% endif %}</td><td>{{ c.type_label }}: {{ EVIDENCE.get(c.grade) or STAGE.get(c.grade) or c.grade }}</td><td class="detail">{{ c.shown }}</td><td>{{ m.sources(c) }}</td></tr>{% endfor %}
+</tbody></table></div>
+{% else %}<p class="sub">No grade has changed since the tracker was seeded.</p>{% endif %}
+{% endblock %}

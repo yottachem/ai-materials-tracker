@@ -1,0 +1,72 @@
+{% extends "base.html.j2" %}
+{% block path %}methods.html{% endblock %}
+{% block title %}Methods{% endblock %}
+{% block description %}What counts as an AI-made material, how evidence, stage and comparisons are graded, and where the figures come from.{% endblock %}
+{% block body %}
+<h1>Methods</h1>
+<p class="lede">The tracker separates materials that have been made and measured from funding and announcements. Every grade, figure and comparison links to its source, and a grade changes only through a dated, reviewed ledger entry.</p>
+{% if preview %}<p class="pending">Draft text for review.</p>{% endif %}
+
+<div class="prose">
+<h2>What counts</h2>
+<ul>
+<li><b>A real material</b>: synthesized or made and measured, not only predicted. Bulk discovery results (many compounds at once) are included when compounds were made, and are marked "not applicable" for comparison.</li>
+<li><b>AI or machine learning had a stated role</b> in designing, selecting or optimizing it, written down by the authors or the company. Computational design without machine learning goes on the watch list.</li>
+<li><b>Organizations are grouped</b> as companies, corporate labs, academic and national labs, and incumbents. An incumbent is included only for a product it attributes to AI or ML, usually with a partner.</li>
+<li><b>Bio-derived materials</b> (enzymes, recombinant proteins, fermentation products) are included and marked by class.</li>
+<li>Organizations working on AI for materials without a qualifying result are on the <a href="watch.html">watch list</a>, with what would move each one onto the list.</li>
+</ul>
+
+<h2>Evidence</h2>
+<ul>
+<li><b>Peer-reviewed</b>: the material, its measured properties and the AI's role are in a peer-reviewed paper.</li>
+<li><b>Preprint</b>: the same, in a preprint (arXiv, ChemRxiv, bioRxiv). Moves to peer-reviewed when the journal version appears.</li>
+<li><b>Company-reported</b>: the company describes the material and its use, without a paper. It may be real; the method is not open to checking. Shown in its own section.</li>
+<li><b>Claim</b>: an announced result with no paper and no named customer.</li>
+</ul>
+<p>A <b>dispute</b> marker shows when a published result has a public critique, an author correction or a retraction. The material page links both sides; the tracker does not judge between them.</p>
+
+<h2>Stage</h2>
+<ul>
+<li><b>Deployed</b>: sold or in use at production scale, named by the company or a customer.</li>
+<li><b>Customer-tested</b>: a named customer or partner has tested it, or it is in a pilot.</li>
+<li><b>Lab</b>: made and measured in a lab, with no customer named.</li>
+</ul>
+
+<h2>The comparison to the existing best</h2>
+<p>Each material page leads with its headline property set beside a benchmark: the current best-in-class or the commercial incumbent for the same use, sourced separately from the AI paper where possible. The <b>basis</b> says how fair that comparison is:</p>
+<ul>
+{% for k, v in BASIS.items() %}<li><b>{{ v }}</b>: {{ BASIS_NOTE[k] | lower }}.</li>{% endfor %}
+</ul>
+<p>The benchmark is the field's best, not the authors' chosen control, unless the basis says otherwise. A result with no fair comparison says so: "none stated" is a finding, not a gap to paper over. The gap is stated in the source's terms, with the trade-offs the source names.</p>
+
+<h2>Verification</h2>
+<p>Every material was checked against its primary source before launch: the paper or preprint for the property and the AI's role, and an independent source for the benchmark. "Verified" means the figures match their sources and the sources meet the bar below. It does not mean the tracker has reproduced the result or that a claim is true; it means the claim is stated where the tracker says it is.</p>
+<p>The weekly run finds candidate changes (a journal version of a preprint, a correction, a launch, a pilot, a funding round) and puts each in a review queue. Nothing in the queue reaches the site until a person checks it against its source.</p>
+
+<h2>Sources and tiers</h2>
+<ul>
+<li><b>Tier 1</b>: the organization's own site, wire services, SEC filings, government and university sites, national labs, journals and preprint servers, and an allowlist of major outlets.</li>
+<li><b>Tier 2</b>: trade and general press not on the allowlist.</li>
+<li><b>Secondary</b>: aggregators, databases and company-profile sites. Used to find events, never as the only source.</li>
+</ul>
+<p>Tiers are in <a href="{{ repo }}/blob/main/reference/source_tiers.yaml">source_tiers.yaml</a>. Google News is used only to find headlines; the site links to the publisher. Only headlines, links, dates and publishers are stored, never article text.</p>
+
+<h2>Funding</h2>
+<p>The funding chart counts <b>disclosed equity only</b>, and only when a tier-1 source states it. Grants, government programs and debt are excluded; federal awards appear on organization pages as non-dilutive history. A company whose funding is known only from aggregators is listed under the chart with its figure and sources, and plotted once a primary source confirms it.</p>
+
+<h2>Checked statements</h2>
+<p>Each sentence under "What the evidence says" on the home page is stored with the condition it rests on, written as a test over the same figures the tables use. Every build re-checks every condition. If the data no longer supports a statement, the page shows the plain numbers instead, marked under review, until the sentence is rewritten. Statements describe the evidence; an organization is named only as the holder of a figure. They are in <a href="{{ repo }}/blob/main/analysis/claims.yaml">analysis/claims.yaml</a>.</p>
+
+<h2>Cadence</h2>
+<p>News, company newsrooms, SEC filings, papers (OpenAlex), corrections (Crossref) and federal awards (USAspending) are checked weekly. Patents (USPTO) are refreshed quarterly. The <a href="status.html">status page</a> shows when each source last produced data.</p>
+
+<h2>Known gaps</h2>
+<ul>
+<li>Corporate and incumbent R&amp;D is mostly unpublished; a material can be in use without the tracker being able to see it.</li>
+<li>Papers are matched by institution or author; startups without an OpenAlex institution are matched by affiliation text and can be missed.</li>
+<li>Patents are fetched for companies only, and a materials patent class does not mean the filing involves AI.</li>
+<li>Benchmarks from different studies (the literature basis) can differ in test conditions; the gap is only as comparable as the tests.</li>
+</ul>
+</div>
+{% endblock %}

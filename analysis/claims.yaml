@@ -1,0 +1,63 @@
+# Checked statements for the home page. analysis/claims.py re-checks each one on every build.
+#
+#   id        unique within its entry
+#   text      what the page says. {m.name:format} fills in a value from the current run. **bold** is allowed.
+#             formats: pct (31%), musd ($580 million, value in USD millions), int, word (seven), cap (Seven)
+#             See every value: uv run python -m analysis.claims --values
+#   holds     the condition the text depends on, as a Python expression over the same values.
+#             If false, the page shows `fallback` marked "under review".
+#   fallback  neutral wording with current numbers, no interpretation ("" hides the statement).
+#
+# Rules: statements describe the evidence on the tracker. An organization is named only as the holder of a figure,
+# never judged. A rewrite changes text and holds together so the condition states exactly what the text asserts.
+# Never loosen holds just to clear a flag. "single" excludes bulk discovery results (not-applicable basis).
+
+checks:
+  published_share: [0, 1]
+  compared_share: [0, 1]
+  none_stated_share: [0, 1]
+  beyond_lab_share: [0, 1]
+  chart_none_share: [0, 1]
+  chart_raised: [0, 1.0e+5]
+
+claims:
+  market:
+    - id: published_and_deployed
+      holds: m.published_deployed <= 2 and m.deployed >= 3
+      text: >-
+        Proof and scale rarely meet. Of {m.deployed:int} deployed materials, **{m.published_deployed:word}** has both a
+        paper and a deployment; the other {m.deployed_unpublished:word} are described only by the companies that make
+        them.
+      fallback: >-
+        {m.published_deployed:cap} deployed material(s) also have a paper; {m.deployed_unpublished:int} deployed
+        materials are company-reported.
+    - id: lab_majority
+      holds: m.beyond_lab_share < 0.5
+      text: >-
+        Most results are still in the lab: {m.lab:int} of {m.n:int} materials, with {m.customer_tested:int} tested by a
+        customer and {m.deployed:int} deployed.
+      fallback: >-
+        {m.lab:int} of {m.n:int} materials are at lab stage, {m.customer_tested:int} customer-tested,
+        {m.deployed:int} deployed.
+    - id: comparison_gap
+      holds: m.compared_share < 0.5
+      text: >-
+        Comparison is the weak link. Only **{m.compared:int} of {m.single:int}** single materials are measured against
+        the field's best or a commercial incumbent; {m.own_baseline:int} are compared with their own starting point or
+        design target, and {m.none_stated:int} state no comparison at all.
+      fallback: >-
+        {m.compared:int} of {m.single:int} single materials have a head-to-head or literature comparison;
+        {m.own_baseline:int} use an internal baseline or design target; {m.none_stated:int} state none.
+    - id: money_without_material
+      holds: m.chart_none_n >= 1 and m.chart_none_share >= 0.2
+      text: >-
+        {m.chart_none_n:cap} of the {m.chart_n:int} companies on the funding chart, holding **{m.chart_none_share:pct}**
+        of its {m.chart_raised:musd} in disclosed equity, have no AI-made material on the tracker yet.
+      fallback: >-
+        {m.chart_none_n:int} of {m.chart_n:int} charted companies ({m.chart_none_share:pct} of
+        {m.chart_raised:musd} disclosed equity) have no material on the tracker yet.
+    - id: disputes
+      holds: m.disputed >= 1
+      text: >-
+        {m.disputed:cap} published results carry a public critique or correction; each material page links both sides.
+      fallback: ""
