@@ -52,10 +52,20 @@ claims:
       holds: m.chart_none_n >= 1 and m.chart_none_share >= 0.2
       text: >-
         {m.chart_none_n:cap} of the {m.chart_n:int} companies on the funding chart, holding **{m.chart_none_share:pct}**
-        of its {m.chart_raised:musd} in disclosed equity, have no AI-made material on the tracker yet.
+        of its {m.chart_raised:musd} in disclosed equity, have no material on the tracker yet.
       fallback: >-
         {m.chart_none_n:int} of {m.chart_n:int} charted companies ({m.chart_none_share:pct} of
         {m.chart_raised:musd} disclosed equity) have no material on the tracker yet.
+    - id: established_ml
+      holds: m.published_established >= 0.6 * m.published and m.published_llm_agentic == 0
+      text: >-
+        Established machine learning is behind most proven results. **{m.published_established:int} of {m.published:int}**
+        materials with a paper came from Bayesian optimization, active learning or ML screening, {m.published_pre2022:word}
+        of them published before 2022; {m.published_generative:word} came from a generative model, and none from a
+        language model or agent.
+      fallback: >-
+        Materials with a paper by method: {m.published_established:int} from Bayesian optimization, active learning or
+        ML screening; {m.published_generative:int} generative; {m.published_llm_agentic:int} LLM or agent.
     - id: disputes
       holds: m.disputed >= 1
       text: >-

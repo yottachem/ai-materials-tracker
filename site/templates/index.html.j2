@@ -3,7 +3,7 @@
 {% block path %}{% endblock %}
 {% block title %}Proof Tracker{% endblock %}
 {% block body %}
-<h1>Which AI-made materials are proven, and against what</h1>
+<h1>Which materials made with AI and ML are proven, and against what</h1>
 <p class="lede">{{ figs.materials }} materials made with AI or machine learning, from {{ figs.orgs }} companies and labs. Each is graded by the evidence behind it and the stage it has reached, and set beside the best existing material it would replace.</p>
 <div class="figs">
   <div class="fig"><b>{{ figs.materials }}</b><span>materials tracked</span></div>
@@ -35,13 +35,25 @@
 {% endfor %}
 </tbody></table></div>
 
+<h2>What the AI or ML did</h2>
+<p class="sub">"AI" here includes established machine learning, much of it in use well before large language models. Each material is filed under the method family its source describes.</p>
+<div class="tw"><table class="ladder">
+<thead><tr><th>Method</th>{% for _, label, _ in SECTIONS %}<th>{{ label }}</th>{% endfor %}</tr></thead>
+<tbody>
+{% for row in methods %}
+<tr><th scope="row" title="{{ row.note }}">{{ row.label }}</th>
+{% for cell in row.cells %}<td{% if not cell %} class="empty"{% endif %}>{% if cell %}<ul>{% for r in cell %}<li>{{ m.mat(r) }}{% if r.m.publication %} <span class="muted">{{ r.m.publication.date | string | truncate(4, true, "") }}</span>{% endif %}</li>{% endfor %}</ul>{% else %}–{% endif %}</td>{% endfor %}
+</tr>
+{% endfor %}
+</tbody></table></div>
+
 <h2>Against the best existing material</h2>
 <p class="sub">Each material's headline property beside the benchmark it was compared with. The basis says how fair the comparison is: <b>head-to-head</b> and <b>literature</b> compare with the field's best; an <b>internal baseline</b> or <b>design target</b> compares with the authors' own starting point; <b>none stated</b> means no quantitative comparison was found.</p>
 <div class="tw"><table>
 <thead><tr><th>Material</th><th>Result</th><th>Benchmark</th><th>Basis</th><th>Gap</th></tr></thead>
 <tbody>
 {% for r in board %}
-<tr><td>{{ m.mat(r) }}<span class="meta">{{ r.cls }} · {{ r.evidence }} · {{ r.stage }}</span></td>
+<tr><td>{{ m.mat(r) }}<span class="meta">{{ r.cls }} · {{ r.evidence }} · {{ r.stage }} · {{ r.method }}</span></td>
 <td>{{ r.m.key_property.value or "Not disclosed" }}</td>
 <td>{% if r.b.basis == "none-stated" %}<span class="muted">{{ r.b.material or "None stated" }}</span>{% else %}{{ r.b.material }}{% if r.b.value %}<span class="meta">{{ r.b.value }}</span>{% endif %}{% endif %}</td>
 <td>{{ m.basis(r.b.basis, BASIS, BASIS_NOTE) }}</td>

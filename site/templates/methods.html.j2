@@ -1,7 +1,7 @@
 {% extends "base.html.j2" %}
 {% block path %}methods.html{% endblock %}
 {% block title %}Methods{% endblock %}
-{% block description %}What counts as an AI-made material, how evidence, stage and comparisons are graded, and where the figures come from.{% endblock %}
+{% block description %}What counts as a material made with AI or ML, how evidence, stage and comparisons are graded, and where the figures come from.{% endblock %}
 {% block body %}
 <h1>Methods</h1>
 <p class="lede">The tracker separates materials that have been made and measured from funding and announcements. Every grade, figure and comparison links to its source, and a grade changes only through a dated, reviewed ledger entry.</p>
@@ -11,11 +11,18 @@
 <h2>What counts</h2>
 <ul>
 <li><b>A real material</b>: synthesized or made and measured, not only predicted. Bulk discovery results (many compounds at once) are included when compounds were made, and are marked "not applicable" for comparison.</li>
-<li><b>AI or machine learning had a stated role</b> in designing, selecting or optimizing it, written down by the authors or the company. Computational design without machine learning goes on the watch list.</li>
+<li><b>AI or machine learning had a stated role</b>, generative or not, in designing, selecting or optimizing it, written down by the authors or the company. Computational design without machine learning goes on the watch list.</li>
 <li><b>Organizations are grouped</b> as companies, corporate labs, academic and national labs, and incumbents. An incumbent is included only for a product it attributes to AI or ML, usually with a partner.</li>
 <li><b>Bio-derived materials</b> (enzymes, recombinant proteins, fermentation products) are included and marked by class.</li>
 <li>Organizations working on AI for materials without a qualifying result are on the <a href="watch.html">watch list</a>, with what would move each one onto the list.</li>
 </ul>
+
+<h2>What the AI or ML did</h2>
+<p>"AI" on this site includes established machine learning. Bayesian optimization, active learning and ML screening were finding materials years before large language models, and most proven results still come from them. Each material is filed under one method family, from what its source says the model did:</p>
+<ul>
+{% for k, v in METHOD.items() %}<li><b>{{ v }}</b>: {{ METHOD_NOTE[k] | lower }}.</li>{% endfor %}
+</ul>
+<p>When a source combines methods, the material is filed under the one that chose or proposed the material. A closed-loop lab that also screens is filed under optimization.</p>
 
 <h2>Evidence</h2>
 <ul>

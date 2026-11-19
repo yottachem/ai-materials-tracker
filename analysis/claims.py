@@ -83,6 +83,12 @@ def values(d):
         "chart_none_n": len(none), "chart_none_raised": none_raised,
         "unconfirmed_n": len(registry.unconfirmed_funding_orgs(d["orgs"])),
     }
+    pub = [m for m in mats if m["evidence"] in PUBLISHED]
+    for k in registry.METHODS:
+        v[f"{k.replace('-', '_')}_n"] = count(lambda m, k=k: m["method"] == k)
+        v[f"published_{k.replace('-', '_')}"] = sum(m["method"] == k for m in pub)
+    v["published_established"] = v["published_optimization"] + v["published_screening"]
+    v["published_pre2022"] = sum(str((m.get("publication") or {}).get("date", ""))[:4] < "2022" for m in pub)
     v["published_share"] = v["published"] / n if n else None
     v["compared_share"] = v["compared"] / single if single else None
     v["none_stated_share"] = v["none_stated"] / single if single else None

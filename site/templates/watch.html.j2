@@ -5,7 +5,7 @@
 {% block description %}Organizations in AI-driven materials with no qualifying material yet, and what would put each on the list.{% endblock %}
 {% block body %}
 <h1>Watch list</h1>
-<p class="lede">{{ n }} organizations working on AI for materials that have no qualifying material on the tracker yet. Each group says what would move an organization onto the materials list. The weekly run watches their papers, filings and news for exactly that.</p>
+<p class="lede">{{ n }} organizations working on AI or ML for materials that have no qualifying material on the tracker yet. Each group says what would move an organization onto the materials list. The weekly run watches their papers, filings and news for exactly that.</p>
 {% for g in groups %}{% if g.rows %}
 <section>
 <h2 id="{{ g.key }}">{{ g.label }} <small class="muted">({{ g.rows | length }})</small></h2>

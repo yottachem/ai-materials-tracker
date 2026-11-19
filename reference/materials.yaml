@@ -35,6 +35,7 @@ materials:
     gap: 40 mV more overpotential than RuOx, with no Ru or Ir and far better metal retention
     tradeoffs: Palladium is itself a platinum-group metal; humans moved samples between tools
   ai_role: AI-guided, human-supervised closed loop (>90% automated); 2,942 catalysts across 53 systems and 26 elements
+  method: optimization
   evidence: preprint
   stage: lab
   publication: {id: "arXiv:2609.30133", url: "https://arxiv.org/abs/2609.30133", title: "AI-guided high-throughput discovery of iridium- and ruthenium-free palladium-oxide catalysts for durable acidic oxygen evolution", date: 2026-09-24}
@@ -60,6 +61,7 @@ materials:
     gap: Re-discovery of the known best in 0.00072% of the search space; the speed is the result
     tradeoffs: ""
   ai_role: Bayesian optimization + automated synthesis and testing (11 parameters, 4 objectives)
+  method: optimization
   evidence: peer-reviewed
   stage: lab
   publication: {id: "doi:10.1016/j.checat.2023.100888", url: "https://doi.org/10.1016/j.checat.2023.100888", title: "Accelerated exploration of heterogeneous CO2 hydrogenation catalysts by Bayesian-optimized high-throughput and automated experimentation", date: 2024}
@@ -85,6 +87,7 @@ materials:
     gap: 43% faster strength gain vs the original formula; 35% lower carbon vs the regional average
     tradeoffs: Long-term durability still under test at UIUC
   ai_role: Bayesian optimization of the mix recipe (BOxCrete, open model on 500+ strength measurements from 123 mixes)
+  method: optimization
   evidence: preprint
   stage: deployed
   publication: {id: "arXiv:2603.21525", url: "https://arxiv.org/abs/2603.21525", title: "BOxCrete: A Bayesian Optimization Open-Source AI Model for Concrete Strength Forecasting and Mix Optimization", date: 2026}
@@ -110,6 +113,7 @@ materials:
     gap: Roughly 100-500x lower conductivity than Li3YCl6, even measured at 100 C against room temperature
     tradeoffs: Less lithium at a large conductivity cost; samples were mixed-phase. The "70% less lithium" figure is Microsoft's framing, not in the paper
   ai_role: ML + cloud HPC screening, 32.6M candidates to 18
+  method: screening
   evidence: peer-reviewed
   stage: lab
   publication: {id: "doi:10.1021/jacs.4c03849", url: "https://doi.org/10.1021/jacs.4c03849", title: "Accelerating Computational Materials Discovery with Machine Learning and Cloud High-Performance Computing: from Large-Scale Screening to Experimental Validation", date: 2024-07-09}
@@ -135,6 +139,7 @@ materials:
     gap: 15% below target
     tradeoffs: Novelty disputed; the phase may already have been in the training data
   ai_role: Generative model (MatterGen)
+  method: generative
   evidence: peer-reviewed
   stage: lab
   publication: {id: "doi:10.1038/s41586-025-08628-5", url: "https://doi.org/10.1038/s41586-025-08628-5", title: "A generative model for inorganic materials design", date: 2025}
@@ -161,6 +166,7 @@ materials:
     gap: Not a single material; the 736 syntheses were mostly not AI-directed
     tradeoffs: ""
   ai_role: Graph neural network screening
+  method: screening
   evidence: peer-reviewed
   stage: lab
   publication: {id: "doi:10.1038/s41586-023-06735-9", url: "https://doi.org/10.1038/s41586-023-06735-9", title: "Scaling deep learning for materials discovery", date: 2023}
@@ -186,6 +192,7 @@ materials:
     gap: Competitive with the 2016 best (22% vs 25%), not a record; deep-blue TADF has since reached 33.5% (2021)
     tradeoffs: ""
   ai_role: ML-prioritized virtual screening + quantum chemistry
+  method: screening
   evidence: peer-reviewed
   stage: lab
   publication: {id: "doi:10.1038/nmat4717", url: "https://doi.org/10.1038/nmat4717", title: "Design of efficient molecular organic light-emitting diodes by a high-throughput virtual screening and experimental approach", date: 2016}
@@ -211,6 +218,7 @@ materials:
     gap: 6x more active than where the robot started; no comparison to the field's best photocatalysts
     tradeoffs: ""
   ai_role: Mobile robot + batched Bayesian search
+  method: optimization
   evidence: peer-reviewed
   stage: lab
   publication: {id: "doi:10.1038/s41586-020-2442-2", url: "https://doi.org/10.1038/s41586-020-2442-2", title: "A mobile robotic chemist", date: 2020}
@@ -236,6 +244,7 @@ materials:
     gap: Comparable to the best acid-treated films (4,500 vs 4,380 S/cm), not a record; the gain is low defects at that conductivity
     tradeoffs: ""
   ai_role: Importance-guided Bayesian optimization of processing
+  method: optimization
   evidence: peer-reviewed
   stage: lab
   publication: {id: "doi:10.1038/s41467-024-55655-3", url: "https://doi.org/10.1038/s41467-024-55655-3", title: "Autonomous platform for solution processing of electronic polymers", date: 2025}
@@ -261,6 +270,7 @@ materials:
     gap: +85% oxidation resistance (one alloy); +4.5% hot hardness (another); no single alloy wins both
     tradeoffs: ""
   ai_role: Active learning (ALPHA-AM) + laser directed energy deposition
+  method: optimization
   evidence: peer-reviewed
   stage: lab
   publication: {id: "doi:10.1038/s44334-026-00098-5", url: "https://doi.org/10.1038/s44334-026-00098-5", title: "Active learning for the accelerated discovery of complex concentrated NiCoCr alloys in additive manufacturing", date: 2026}
@@ -286,6 +296,7 @@ materials:
     gap: Well below the near-unity 2023 result the paper itself cites; the release's "best-in-class" is not quantified in the paper
     tradeoffs: ""
   ai_role: Autonomous microfluidic optimization
+  method: optimization
   evidence: peer-reviewed
   stage: lab
   publication: {id: "doi:10.1038/s41467-026-72765-2", url: "https://doi.org/10.1038/s41467-026-72765-2", title: "Autonomous microfluidic experimentation for exploring reaction inference and synthesizing double perovskite nanoplatelets", date: 2026-05-04}
@@ -311,6 +322,7 @@ materials:
     gap: Compounds were new to the platform, not necessarily new to science (author correction)
     tradeoffs: ""
   ai_role: Autonomous lab + ML synthesis planning
+  method: optimization
   evidence: peer-reviewed
   stage: lab
   publication: {id: "doi:10.1038/s41586-023-06734-w", url: "https://doi.org/10.1038/s41586-023-06734-w", title: "An autonomous laboratory for the accelerated synthesis of inorganic materials", date: 2023}
@@ -338,6 +350,7 @@ materials:
     gap: About 7x lower total and 4x lower bulk conductivity; the paper's "comparable" sets its bulk value against the benchmark's total
     tradeoffs: Densification and sintering not yet optimized (authors)
   ai_role: Self-driving lab (A-Lab) + physics-informed cost functions (CASS)
+  method: optimization
   evidence: preprint
   stage: lab
   publication: {id: "arXiv:2609.29344", url: "https://arxiv.org/abs/2609.29344", title: "Combining physical models with dynamically acquired experimental information for the optimization of multicomponent NASICON fast ionic conductors in a self-driving laboratory", date: 2026-09-24}
@@ -363,6 +376,7 @@ materials:
     gap: Claimed up to 5x cheaper than sorbent DAC; compound undisclosed, no published data
     tradeoffs: ""
   ai_role: Generative design + Orb simulation
+  method: generative
   evidence: company-reported
   stage: customer-tested
   sources: ["https://techcrunch.com/2024/12/03/amazon-teams-up-with-orbital-to-remove-co2-from-the-air-at-one-of-its-datacenters", "https://hydrocarbonprocessing.com/news/2026/08/basf-ecms-deploys-ai-materials-discovery-platform-built-by-orbital-industries/"]
@@ -388,6 +402,7 @@ materials:
     gap: 70-80% less fabrication time (company-reported)
     tradeoffs: ""
   ai_role: AI used "to optimize the processing and production"
+  method: not-stated
   evidence: company-reported
   stage: customer-tested
   sources: ["https://www.prnewswire.com/news-releases/cambium-launches-new-high-temperature-resin-system-for-aerospace-manufacturers-that-reduces-hypersonic-parts-fabrication-by-70-80-302438000.html"]
@@ -413,6 +428,7 @@ materials:
     gap: 20% longer early cycle life than SES's own baseline
     tradeoffs: ""
   ai_role: ML screening of molecules
+  method: screening
   evidence: company-reported
   stage: lab
   sources: []
@@ -437,6 +453,7 @@ materials:
     gap: Gains vs the program's starting point; the efficiency gain came mainly from co-host layer optimization, so the AI's share is unclear
     tradeoffs: No material named
   ai_role: ML + quantum chemistry (Kyumatic, licensed from Harvard)
+  method: screening
   evidence: company-reported
   stage: customer-tested
   sources: ["https://www.kyulux.com/jst-features-kyuluxs-kyumatic-ai-system-in-science-publication/"]
@@ -462,6 +479,7 @@ materials:
     gap: 2x yield (2025 release); an earlier company figure says 3x under mild conditions. Company claims up to 47% more plant capacity, 23% less energy
     tradeoffs: ""
   ai_role: Physics-based simulation + ML + high-throughput experiments
+  method: screening
   evidence: company-reported
   stage: customer-tested
   sources: ["https://hydrocarbonprocessing.com/news/2025/10/copernic-catalysts-announces-ammonia-catalyst-milestone-in-research-collaboration-with-schroedinger/"]
@@ -483,6 +501,7 @@ materials:
     gap: No performance comparison published; the AI's role in the shipped material is not stated
     tradeoffs: ""
   ai_role: Physics-informed AI platform
+  method: not-stated
   evidence: company-reported
   stage: customer-tested
   sources: ["https://prnewswire.com/news-releases/mitra-chem-completes-successful-multi-ton-lfp-cam-production-begins-shipping-commercial-samples-to-major-customers-302059017.html"]
@@ -509,6 +528,7 @@ materials:
     gap: Cost advantage claimed, not quantified
     tradeoffs: ""
   ai_role: Computational protein design
+  method: not-stated
   evidence: company-reported
   stage: deployed
   sources: ["https://www.businesswire.com/news/home/20241107936695/en/"]
@@ -533,6 +553,7 @@ materials:
     gap: No comparison stated
     tradeoffs: ""
   ai_role: Generative AI design of electrolyte and cell
+  method: generative
   evidence: company-reported
   stage: deployed
   sources: ["https://www.fastcompany.com/90892687/this-startup-uses-ai-to-design-better-ev-batteries"]
@@ -558,6 +579,7 @@ materials:
     gap: No comparison stated; planned clinical study results not found
     tradeoffs: ""
   ai_role: AI selection of the collagen subsegment
+  method: not-stated
   evidence: company-reported
   stage: deployed
   sources: ["https://globenewswire.com/news-release/2023/03/23/2632977/0/en/Cambrium-Launches-NovaColl-First-Micro-Molecular-Skin-Identical-Collagen-Ingredient-for-Personal-Care-Industry.html", "https://www2.brenntag.com/en-emea/co/cambrium-partnership/web/"]
@@ -582,6 +604,7 @@ materials:
     gap: Iridium reduction not quantified
     tradeoffs: ""
   ai_role: Combinatorial Megalibrary chips + AI
+  method: not-stated
   evidence: company-reported
   stage: customer-tested
   sources: ["https://www.heraeus-precious-metals.com/en/company/press-and-news/mattiq-and-heraeus-partner-to-advance-electrocatalyst-innovation/", "https://www.businesswire.com/news/home/20231003314654/en/Mattiq-Develops-Portfolio-of-Novel-Catalysts-to-Solve-Key-Materials-Challenge-in-the-Global-Scale-Up-of-Clean-Hydrogen"]
@@ -608,6 +631,7 @@ materials:
     gap: Essentially no mass loss vs 32% for C103 (company-reported)
     tradeoffs: ""
   ai_role: Self-driving lab
+  method: optimization
   evidence: company-reported
   stage: lab
   sources: ["https://www.rdworldonline.com/how-radical-ai-is-building-a-self-driving-materials-lab/"]
@@ -623,6 +647,7 @@ materials:
   key_property: {name: "", value: "No magnetic data public", source: "https://sheffield.ac.uk/royce-institute/case-studies/matnex-case-study"}
   benchmark: {material: "NdFeB rare-earth magnets", value: "", source: "", basis: none-stated, gap: "No data", tradeoffs: ""}
   ai_role: AI materials design
+  method: not-stated
   evidence: claim
   stage: lab
   sources: ["https://sheffield.ac.uk/royce-institute/case-studies/matnex-case-study"]
@@ -638,6 +663,7 @@ materials:
   key_property: {name: "", value: "No data", source: "https://news.cision.com/kemira-oyj/r/new-ai-designed-materials-show-promising-potential-to-remove--forever-chemicals--from-drinking-water,c4351166"}
   benchmark: {material: "Granular activated carbon, ion exchange resins", value: "", source: "", basis: none-stated, gap: "No data", tradeoffs: ""}
   ai_role: Generative design
+  method: generative
   evidence: claim
   stage: lab
   sources: ["https://news.cision.com/kemira-oyj/r/new-ai-designed-materials-show-promising-potential-to-remove--forever-chemicals--from-drinking-water,c4351166"]
@@ -653,6 +679,7 @@ materials:
   key_property: {name: "", value: "No property data published", source: "https://azure.microsoft.com/blog/transforming-rd-with-agentic-ai-introducing-microsoft-discovery"}
   benchmark: {material: "PFAS coolants (3M Novec, exited 2024)", value: "", source: "", basis: none-stated, gap: "No data", tradeoffs: ""}
   ai_role: Agentic AI + HPC screening
+  method: llm-agentic
   evidence: company-reported
   stage: lab
   sources: ["https://azure.microsoft.com/blog/transforming-rd-with-agentic-ai-introducing-microsoft-discovery"]
@@ -668,6 +695,7 @@ materials:
   key_property: {name: "", value: "No composition or data", source: "https://www.eneos.co.jp/english/rd/research/digital/mi.html"}
   benchmark: {material: "Existing methanol catalysts", value: "", source: "", basis: none-stated, gap: "Qualitative claim only", tradeoffs: ""}
   ai_role: Universal ML interatomic potential (Matlantis)
+  method: screening
   evidence: claim
   stage: lab
   sources: ["https://www.eneos.co.jp/english/rd/research/digital/mi.html"]
@@ -683,6 +711,7 @@ materials:
   key_property: {name: Hardness, value: "5x", source: "https://www.chemengonline.com/advancing-additive-manufacturing-using-data-visualization-and-ai"}
   benchmark: {material: "Polyfos's prior formulation", value: "", source: "https://www.chemengonline.com/advancing-additive-manufacturing-using-data-visualization-and-ai", basis: internal-baseline, gap: "5x harder than its own earlier material (vendor trade article)", tradeoffs: ""}
   ai_role: AI-guided experiment design (MaterialsZone platform)
+  method: optimization
   evidence: company-reported
   stage: lab
   sources: []

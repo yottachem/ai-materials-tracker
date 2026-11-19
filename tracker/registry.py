@@ -22,6 +22,13 @@ DISPUTE = ("disputed", "corrected", "retracted")
 FUNDING_TIERS = ("tier1", "aggregator")
 MATERIAL_CLASSES = ("catalyst", "electrolyte", "battery-cathode", "alloy", "polymer", "cement-concrete", "oled",
                     "optical", "inorganic-crystal", "sorbent", "magnet", "fluid", "bio")
+# What the AI or ML did, by family. Most proven results use established ML that predates LLMs.
+#   optimization  Bayesian optimization, active learning or a closed-loop / self-driving lab choosing the next experiment
+#   screening     ML property prediction ranking a candidate set (GNNs, ML potentials, regression, virtual screening)
+#   generative    a generative model proposing new structures
+#   llm-agentic   an LLM or agent driving the search
+#   not-stated    the source says AI or ML but not which method
+METHODS = ("optimization", "screening", "generative", "llm-agentic", "not-stated")
 COMPARED = ("head-to-head", "literature", "internal-baseline", "design-target")
 
 
@@ -83,6 +90,8 @@ def problems(mats: list[dict] | None = None, org_list: list[dict] | None = None)
             out.append(f"{mid}: evidence {m.get('evidence')!r} not in {EVIDENCE}")
         if m.get("stage") not in STAGES:
             out.append(f"{mid}: stage {m.get('stage')!r} not in {STAGES}")
+        if m.get("method") not in METHODS:
+            out.append(f"{mid}: method {m.get('method')!r} not in {METHODS}")
         if m.get("material_class") not in MATERIAL_CLASSES:
             out.append(f"{mid}: material_class {m.get('material_class')!r} not in {MATERIAL_CLASSES}")
         for oid in m.get("orgs") or []:

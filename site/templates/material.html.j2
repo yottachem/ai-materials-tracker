@@ -18,7 +18,8 @@
     {% if r.b.tradeoffs %}<div class="w"><b>Tradeoffs:</b> {{ r.b.tradeoffs }}</div>{% endif %}</div>
 </div>
 
-<h2>What the AI did</h2>
+<h2>What the AI or ML did</h2>
+<p class="chips"><span class="chip b-not-applicable" title="{{ METHOD_NOTE[x.method] }}">{{ r.method }}</span> <span class="muted">{{ METHOD_NOTE[x.method] }}</span></p>
 <p class="prose">{{ x.ai_role }}</p>
 
 <h2>Evidence trail</h2>

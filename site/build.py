@@ -52,13 +52,22 @@ DISPUTE = {"disputed": "Disputed", "corrected": "Corrected", "retracted": "Retra
 CLASS = {"catalyst": "Catalyst", "electrolyte": "Electrolyte", "battery-cathode": "Battery cathode", "alloy": "Alloy",
          "polymer": "Polymer", "cement-concrete": "Cement and concrete", "oled": "OLED", "optical": "Optical",
          "inorganic-crystal": "Inorganic crystal", "sorbent": "Sorbent", "magnet": "Magnet", "fluid": "Fluid", "bio": "Bio-derived"}
+METHOD = {"optimization": "Bayesian optimization or active learning", "screening": "ML screening",
+          "generative": "Generative model", "llm-agentic": "LLM or agent", "not-stated": "Method not stated"}
+METHOD_NOTE = {"optimization": "A model chooses the next experiment from the results so far (Bayesian optimization, active "
+                               "learning, closed-loop or self-driving labs)",
+               "screening": "A model predicts properties to rank a candidate set (graph neural networks, ML potentials, "
+                            "regression, virtual screening)",
+               "generative": "A generative model proposes new structures",
+               "llm-agentic": "A large language model or agent drives the search",
+               "not-stated": "The source says AI or ML but not which method"}
 ORG_TYPE = {"company": "Company", "corporate-lab": "Corporate lab", "academic": "Academic or national lab", "incumbent": "Incumbent"}
 WATCH = {
-    "no-result": ("No material yet", "No AI-made material published or announced",
+    "no-result": ("No material yet", "No material made with AI or ML published or announced",
                   "A named material with a measured property, from the organization itself"),
     "platform": ("Platform or software", "Sells AI/ML software or services; no material of its own",
                  "A named customer material with a measured property and the platform's role stated"),
-    "incumbent-no-product": ("Incumbent, no AI-made product", "Runs AI programs but names no product made with them",
+    "incumbent-no-product": ("Incumbent, no AI or ML product", "Runs AI or ML programs but names no product made with them",
                              "A product the company attributes to AI or ML"),
     "no-ml": ("Computational design, no ML", "Computationally designed materials, but no machine-learning role stated",
               "A primary source stating what the model did"),
@@ -172,7 +181,7 @@ def material_records(mats, org_by_id, ledger):
             "id": m["id"], "m": m, "b": b, "section": section(m),
             "orgs": [org_by_id[o] for o in m["orgs"]],
             "evidence": EVIDENCE[m["evidence"]], "stage": STAGE[m["stage"]], "basis": BASIS[b["basis"]],
-            "basis_note": BASIS_NOTE[b["basis"]], "cls": CLASS[m["material_class"]],
+            "basis_note": BASIS_NOTE[b["basis"]], "cls": CLASS[m["material_class"]], "method": METHOD[m["method"]],
             "dispute": DISPUTE.get((d or {}).get("status")), "trail": trail,
             "grades": [r for r in rows if r["type"] in GRADE_TYPES],
             "events": [r for r in rows if r["type"] not in GRADE_TYPES],
@@ -236,7 +245,7 @@ def funding_chart(orecs):
         x = (f["low"] + f["high"]) / 2
         tip = f'{o["name"]}: {charts.fmt(x, "musd")} disclosed equity. '
         tip += (f'Strongest material: {bst[2]["m"]["name"]} ({bst[2]["evidence"]}, {bst[2]["stage"]})' if bst
-                else "No AI-made material on the tracker yet")
+                else "No material made with AI or ML on the tracker yet")
         pts.append({"label": o["name"], "href": f'org/{o["id"]}.html', "x": x, "row": bst[0] if bst else len(rows) - 1,
                     "level": bst[1] if bst else "n", "tip": tip, "none": not bst})
     svg = charts.funding_strip(pts, rows, desc="Organizations by tier-1 disclosed equity and the evidence grade of their strongest material")
@@ -263,7 +272,10 @@ def home_context(mrecs, orecs, ledger):
             "deployed": sum(r["m"]["stage"] == "deployed" for r in mrecs.values()),
             "compared": sum(r["b"]["basis"] in ("head-to-head", "literature") for r in mrecs.values()),
             "orgs": len({o for r in mrecs.values() for o in r["m"]["orgs"]})}
-    return {"ladder": ladder, "stages": list(STAGE.values()), "board": board, "changes": changes, "figs": figs,
+    methods = [{"key": k, "label": v, "note": METHOD_NOTE[k],
+                "cells": [[r for r in mrecs.values() if r["m"]["method"] == k and r["section"] == sec] for sec, _, _ in SECTIONS]}
+               for k, v in METHOD.items()]
+    return {"ladder": ladder, "stages": list(STAGE.values()), "board": board, "methods": methods, "changes": changes, "figs": figs,
             **funding_chart(orecs)}
 
 
@@ -330,7 +342,7 @@ def main(preview=False):
     env.filters["host"] = domain_of
     common = {"repo": REPO, "preview": preview, "site_url": SITE_URL, "built": __import__("datetime").date.today().isoformat(),
               "analytics_token": "" if preview else ANALYTICS_TOKEN, "EVIDENCE": EVIDENCE, "STAGE": STAGE, "BASIS": BASIS,
-              "BASIS_NOTE": BASIS_NOTE, "CLASS": CLASS, "ORG_TYPE": ORG_TYPE, "SECTIONS": SECTIONS}
+              "BASIS_NOTE": BASIS_NOTE, "CLASS": CLASS, "METHOD": METHOD, "METHOD_NOTE": METHOD_NOTE, "ORG_TYPE": ORG_TYPE, "SECTIONS": SECTIONS}
     if DIST.exists():
         shutil.rmtree(DIST)
     (DIST / "material").mkdir(parents=True)

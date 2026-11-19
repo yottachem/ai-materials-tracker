@@ -2,13 +2,14 @@
 {% import "_macros.html.j2" as m %}
 {% block path %}materials.html{% endblock %}
 {% block title %}Materials{% endblock %}
-{% block description %}Every AI-made material on the tracker with its evidence grade, stage, headline property and benchmark.{% endblock %}
+{% block description %}Every material made with AI or ML on the tracker with its evidence grade, stage, headline property and benchmark.{% endblock %}
 {% block body %}
 <h1>Materials</h1>
 <p class="lede">{{ mrecs | length }} materials, grouped by the kind of evidence behind them. Company-reported results sit in their own section: they may be real, but no paper sets out the method.</p>
 <div class="filters" role="group" aria-label="Filter materials">
   <label>Stage <select name="stage"><option value="">All</option>{% for k, v in STAGE.items() %}<option value="{{ k }}">{{ v }}</option>{% endfor %}</select></label>
   <label>Comparison <select name="basis"><option value="">All</option>{% for k, v in BASIS.items() %}<option value="{{ k }}">{{ v }}</option>{% endfor %}</select></label>
+  <label>Method <select name="method"><option value="">All</option>{% for k, v in METHOD.items() %}<option value="{{ k }}">{{ v }}</option>{% endfor %}</select></label>
   <label>Class <select name="cls"><option value="">All</option>{% for k, v in CLASS.items() %}{% if mrecs.values() | selectattr("m.material_class", "equalto", k) | list %}<option value="{{ k }}">{{ v }}</option>{% endif %}{% endfor %}</select></label>
   <label>Organization <select name="otype"><option value="">All</option>{% for k, v in ORG_TYPE.items() %}<option value="{{ k }}">{{ v }}</option>{% endfor %}</select></label>
   <span class="count"></span>
@@ -23,8 +24,8 @@
 <thead><tr><th>Material</th><th>Grade</th><th>Result</th><th>Benchmark and gap</th><th>Basis</th></tr></thead>
 <tbody>
 {% for r in rows %}
-<tr data-row data-stage="{{ r.m.stage }}" data-basis="{{ r.b.basis }}" data-cls="{{ r.m.material_class }}" data-otype="{{ r.org_types | join(' ') }}">
-<td>{{ m.mat(r) }}<span class="meta">{{ r.cls }} · {% for o in r.orgs %}{{ o.name }}{{ ", " if not loop.last }}{% endfor %}</span></td>
+<tr data-row data-stage="{{ r.m.stage }}" data-basis="{{ r.b.basis }}" data-cls="{{ r.m.material_class }}" data-method="{{ r.m.method }}" data-otype="{{ r.org_types | join(' ') }}">
+<td>{{ m.mat(r) }}<span class="meta">{{ r.cls }} · {{ r.method }} · {% for o in r.orgs %}{{ o.name }}{{ ", " if not loop.last }}{% endfor %}</span></td>
 <td><div class="chips">{{ m.ev(r.m.evidence, EVIDENCE) }}{{ m.st(r.m.stage, STAGE) }}{{ m.dispute(r) }}</div></td>
 <td>{{ r.m.key_property.value or "Not disclosed" }}</td>
 <td class="detail">{% if r.b.basis == "none-stated" %}<span class="muted">None stated</span>{% else %}{{ r.b.material }}{% if r.b.gap %}<span class="meta">{{ r.b.gap }}</span>{% endif %}{% endif %}</td>
