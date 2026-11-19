@@ -11,6 +11,8 @@
 #                require: one of these must also appear in the matched affiliation text (same-name collisions)
 #                authors: OpenAlex author ids (named groups inside big institutions)
 #                query: title-and-abstract search applied to this org's works (default: none for startups and authors)
+# patents        USPTO search: query (applicant/assignee names), match (phrases a record must contain); false skips
+# awards         USAspending recipient search, same keys (default: the patents names); false skips
 # verify         fields still to confirm
 # Checked 2026-11-19: domains by fetch, CIKs by EDGAR search + submissions record, OpenAlex ids by API.
 
@@ -68,11 +70,13 @@ signals:
     news: {terms: ['"Cambium"'], context: [ApexShield, "El Segundo", resin, aerospace, materials, composite],
            exclude: ["Cambium Networks", "Cambium Learning", "Cambium Carbon", "Cambium Assessment"]}
     openalex: {affiliations: ["Cambium"], require: ["El Segundo"]}
+    patents: {query: ["Cambium Biomaterials"]}   # many same-name assignees; the El Segundo company files as Cambium Biomaterials, Inc.
   ses-ai:
     domains: [ses.ai]
     news: {terms: ['"SES AI"'], context: [electrolyte, battery, batteries, "Molecular Universe", lithium]}
     cik: "1819142"
     openalex: {affiliations: ["SES AI"]}
+    patents: {query: ["SES Holdings", "SolidEnergy Systems", "SES AI"]}   # files as SES Holdings Pte. Ltd.; SolidEnergy Systems is the former name
   kyulux:
     domains: [kyulux.com]
     news: {terms: ['"Kyulux"']}
@@ -85,11 +89,14 @@ signals:
   schrodinger:
     domains: [schrodinger.com]
     cik: "1490978"
+    patents: {query: ["Schrodinger"], match: ["schrodinger, inc", "schrodinger inc", "schrodinger, llc", "schrodinger llc"]}   # excludes Chengdu Schrodinger Energy Carbon
+    awards: false   # federal awards are purchases of its software licenses (revenue), not program funding
   mitra-chem:
     domains: [mitrachem.com]
     news: {terms: ['"Mitra Chem"']}
     cik: "1887663"   # Mitra Future Technologies, Inc., Mountain View ZIP 94043
     openalex: {affiliations: ["Mitra Chem"]}
+    patents: {query: ["Mitra Future Technologies"]}   # legal name
     verify: [cik]
   arzeda:
     domains: [arzeda.com]
@@ -100,6 +107,7 @@ signals:
     domains: [chemix.ai]
     news: {terms: ['"Chemix"'], context: [battery, batteries, AI, EV, cells], exclude: ["Daito Chemix"]}
     openalex: {affiliations: ["Chemix"], require: ["Sunnyvale", "Mountain View", "California", "CA"]}
+    patents: {query: ["Chemix Inc"], match: ["chemix inc"]}   # excludes Ushio Chemix, Daito Chemix
   cambrium:
     domains: [cambrium.bio]
     news: {terms: ['"Cambrium"'], context: [NovaColl, collagen, protein, biotech, Berlin], exclude: ["Cambrium Mining"]}
@@ -109,6 +117,7 @@ signals:
     news: {terms: ['"Mattiq"']}
     cik: "1843720"
     openalex: {affiliations: ["Mattiq"]}
+    patents: {query: ["Mattiq", "Stoicheia"]}   # former name; reassigned filings also match on assignee
   heraeus:
     domains: [heraeus.com]
   radical-ai:
@@ -202,10 +211,12 @@ signals:
   polaron:
     news: {terms: ['"Polaron"'], context: [materials, microstructure, battery, AI],
            exclude: ["small polaron", "polaron effect", "polarons"]}
+    patents: false   # only "Polaron Analytics" (LLM product design) files under the name; not confirmed as this company
   sandboxaq:
     news: {terms: ['"SandboxAQ"'], context: [materials, catalyst, battery, chemistry, alloy]}
   dp-technology:
     news: {terms: ['"DP Technology"'], context: [materials, battery, AI]}
+    patents: false   # "DP Technology Corp." in ODP is the CAM-software company (Hexagon)
   deep-principle:
     news: {terms: ['"Deep Principle"']}
   mat3ra:

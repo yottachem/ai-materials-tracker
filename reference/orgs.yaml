@@ -3,13 +3,16 @@
 # watch: why an organization with no qualifying material is tracked (excluded orgs only)
 # funding: total disclosed, USD millions. tier: tier1 (company, wire, SEC) | aggregator (CB Insights, PitchBook, Fundz).
 #   The public chart plots tier1 only (plan, 2026-11-19); aggregator rows are placeholders until re-sourced.
+#   Disclosed equity only (approved 2026-11-19): grants and government money go in the note; federal awards are ledger
+#   type award. Tier-1 pass 2026-11-19: each tier1 total is the sum of the rounds its sources state.
 # Seeded 2026-11-19 from the Tools Companies vault screen.
 
 orgs:
 
 # ---------------------------------------------------------------- Organizations with a material
 - {id: lila-sciences, name: Lila Sciences, type: company, hq: "Cambridge, MA",
-   funding: {low: 550, high: 550, tier: aggregator}, verify: [funding]}
+   funding: {low: 550, high: 550, tier: aggregator, note: "$200M seed Mar 2025 + $350M Series A Oct 2025. Reuters exclusive seen only as a syndicated copy; reuters.com URL not yet verified"},
+   sources: ["https://finance.yahoo.com/news/exclusive-ai-lab-lila-sciences-101645837.html"], verify: [funding]}
 - {id: atinary, name: Atinary, type: company, hq: "Lausanne, Switzerland",
    funding: {low: 5, high: 9.8, tier: aggregator, note: "$5M seed (AgFunder release); CB Insights lists $9.8M"},
    sources: ["https://agfundernews.com/atinary-technologies-raises-5m-seed-round-to-turbocharge-rd-process"], verify: [funding]}
@@ -28,24 +31,28 @@ orgs:
 - {id: nc-state, name: NC State University (Abolhasani, PoLARIS), type: academic, hq: "Raleigh, NC"}
 - {id: berkeley-lab, name: Lawrence Berkeley National Laboratory (A-Lab), type: academic, hq: "Berkeley, CA"}
 - {id: orbital-industries, name: Orbital Industries, former_names: [Orbital Materials], type: company, hq: "London, UK",
-   funding: {low: 71, high: 71, tier: tier1, note: "$21M through Series A + $50M Series B (May 2026)"},
+   funding: {low: 21, high: 21, tier: tier1, note: "$21M through Series A (company). Not counted: $50M Series B May 2026, Fortune exclusive only (tier 2)"},
    sources: ["https://orbitalmaterials.com/news/series-a-announcement", "https://fortune.com/2026/05/28/exclusive-orbital-industries-raises-50-million-series-b-funding-round-ai-to-discover-exotic-new-materials/"]}
 - {id: cambium, name: Cambium, type: company, hq: "El Segundo, CA", note: "Not Cambrium (Berlin, bio)",
-   funding: {low: 127, high: 142, tier: aggregator}, sources: ["https://pitchbook.com/profiles/company/435210-04"], verify: [funding]}
+   funding: {low: 127, high: 127, tier: tier1, note: "$8M seed 2021 + $19M Series A Dec 2023 ($27M to date per the A release) + $100M Series B Jan 2026"},
+   sources: ["https://prnewswire.com/news-releases/cambium-announces-close-of-its-19-million-series-a-financing-302005654.html", "https://www.prnewswire.com/news-releases/cambium-secures-100-million-series-b-to-accelerate-the-discovery-and-scaling-of-advanced-materials-302649717.html"]}
 - {id: ses-ai, name: SES AI, type: company, hq: "Woburn, MA", ticker: SES, note: "Public; not plotted on the funding chart"}
 - {id: kyulux, name: Kyulux, type: company, hq: "Fukuoka, Japan",
    funding: {low: 108, high: 162, tier: aggregator, note: "~JPY 12.7B through Series C (company); +$53.7M Series D Nov 2026 (Fundz only)"},
    sources: ["https://www.gophotonics.com/news/details/5507-kyulux-secures-28-6m-in-series-c-to-accelerate-product-development-and-targets-full-scale-mass-production", "https://app.fundz.net/fundings/kyulux-funding-round-series-d-cd0fe2"], verify: [funding]}
 - {id: copernic-catalysts, name: Copernic Catalysts, type: company, hq: "Cambridge, MA",
-   funding: {low: 14, high: 14, tier: aggregator, note: "Incl. grants"}, verify: [funding]}
+   funding: {low: 10, high: 10, tier: tier1, note: "$10M venture to date incl. $8M seed prime Nov 2024; plus $4M non-dilutive grants (not counted)"},
+   sources: ["https://www.businesswire.com/news/home/20251030699215/en", "https://www.businesswire.com/news/home/20241112148260/en"]}
 - {id: schrodinger, name: Schrodinger, type: company, hq: "New York, NY", ticker: SDGR, note: "Platform partner on Copernic's Neptune; no material of its own"}
 - {id: mitra-chem, name: Mitra Chem, type: company, hq: "Mountain View, CA",
-   funding: {low: 76, high: 243, tier: aggregator, note: "Sources disagree"}, sources: ["https://www.cbinsights.com/company/mitra-chem/financials"], verify: [funding]}
+   funding: {low: 80, high: 80, tier: tier1, note: "$20M Series A Nov 2021 + $60M Series B 2023 (GM lead). Not counted: DOE $100M AMPLIFI grant; reported $50M raise 2025"},
+   sources: ["https://techcrunch.com/2021/11/15/mitra-chem-takes-aim-at-chinese-dominance-of-battery-materials-supply-chain", "https://prnewswire.com/news-releases/mitra-chems-new-strategic-investments-address-us-energy-resilience-through-onshoring-of-critical-battery-supply-chains-301980745.html"]}
 - {id: arzeda, name: Arzeda, type: company, hq: "Seattle, WA", bio: true,
-   funding: {low: 83, high: 83, tier: aggregator}, verify: [funding]}
+   funding: {low: 83, high: 83, tier: tier1, note: "$83M total after the $38M Sep 2024 round (TechCrunch); incl. $33M Series B Mar 2022"},
+   sources: ["https://techcrunch.com/?p=2853002", "https://prnewswire.com/news-releases/arzeda-the-industry-leading-protein-design-company-closes-33-million-series-b-funding-led-by-conti-ventures-301513821.html", "https://www.businesswire.com/news/home/20240917870556/en"]}
 - {id: chemix, name: Chemix, type: company, hq: "California",
-   funding: {low: 20, high: 30, tier: aggregator, note: "$10M seed + $20M Series A (Apr 2024)"},
-   sources: ["https://www.webwire.com/ViewPressRel.asp?aId=320895", "https://www.cbinsights.com/company/chemix/financials"], verify: [funding, hq]}
+   funding: {low: 30, high: 30, tier: tier1, note: "$10M seed May 2023 + $20M Series A Apr 2024. Not counted: $3.6M pre-seed Oct 2021 (investor site only)"},
+   sources: ["https://techcrunch.com/?p=2535818", "https://www.webwire.com/ViewPressRel.asp?aId=320895"], verify: [hq]}
 - {id: cambrium, name: Cambrium, type: company, hq: "Berlin, Germany", bio: true, note: "Not Cambium (El Segundo)",
    funding: {low: 11.6, high: 13.5, tier: aggregator, note: "EUR 11M per Oct 2023 seed coverage; CB Insights $13.5M"},
    sources: ["https://beautymatter.com/articles/cambrium-raises-11-6-million-to-commercialize-performance-molecules"], verify: [funding]}
@@ -54,12 +61,14 @@ orgs:
    sources: ["https://www.businesswire.com/news/home/20230207005510/en/Mattiq-Launches-With-Revolutionary-Approach-to-Developing-Sustainable-Materials"], verify: [hq]}
 - {id: heraeus, name: Heraeus Precious Metals, type: incumbent, hq: "Hanau, Germany", note: "Scale-up partner for Mattiq"}
 - {id: radical-ai, name: Radical AI, type: company, hq: "New York, NY",
-   funding: {low: 55, high: 65, tier: aggregator}, sources: ["https://pulse2.com/radical-ai-55-million-series-seed-raised-for-advancing-materials-research"], verify: [funding]}
+   funding: {low: 65, high: 65, tier: aggregator, note: "$10M pre-seed Mar 2024 + $55M seed Jul 2025; no company or wire release found"},
+   sources: ["https://pulse2.com/radical-ai-55-million-series-seed-raised-for-advancing-materials-research"], verify: [funding]}
 - {id: purdue, name: Purdue University, type: academic, hq: "West Lafayette, IN"}
 - {id: materials-nexus, name: Materials Nexus, type: company, hq: "London, UK",
    funding: {low: 2.6, high: 2.6, tier: aggregator}, sources: ["https://www.cbinsights.com/company/materials-nexus/financials"], verify: [funding]}
 - {id: cusp-ai, name: CuspAI, type: company, hq: "Cambridge, UK",
-   funding: {low: 580, high: 670, tier: aggregator}, verify: [funding]}
+   funding: {low: 580, high: 580, tier: tier1, note: "$30M seed Jun 2024 + $100M Series A Sep 2025 + $450M Series B Jul 2026 at $2.6B"},
+   sources: ["https://techcrunch.com/2024/06/18/cuspai-raises-30m-to-create-a-gen-ai-driven-search-engine-for-new-materials", "https://www.bloomberg.com/news/videos/2025-09-11/nvidia-baked-cusp-ai-raises-100m-in-series-a-funding-video", "https://sifted.eu/articles/cuspai-lands-450m-round-to-accelerate-ai-materials-discovery"]}
 - {id: kemira, name: Kemira, type: incumbent, hq: "Helsinki, Finland"}
 - {id: eneos, name: ENEOS (Matlantis with Preferred Networks), type: incumbent, hq: "Tokyo, Japan"}
 - {id: polyfos, name: Polyfos, type: company, hq: ""}
@@ -67,8 +76,11 @@ orgs:
 
 # ---------------------------------------------------------------- Watch list (no qualifying material yet)
 - {id: periodic-labs, name: Periodic Labs, type: company, watch: no-result,
-   funding: {low: 300, high: 300, tier: aggregator, note: "$300M seed; reported $750M Series A unconfirmed"}, verify: [funding]}
-- {id: chemify, name: Chemify, type: company, watch: no-result, funding: {low: 150, high: 150, tier: aggregator}, verify: [funding]}
+   funding: {low: 300, high: 300, tier: tier1, note: "$300M seed Sep 2025. Not counted: reported $500M+ raise May 2026 (not closed)"},
+   sources: ["https://techcrunch.com/2025/09/30/former-openai-and-deepmind-researchers-raise-whopping-300m-seed-to-automate-science"]}
+- {id: chemify, name: Chemify, type: company, watch: no-result,
+   funding: {low: 84, high: 84, tier: tier1, note: "At least: $34M venture of the $43M Series A package Aug 2023 + more than $50M Series B Oct 2025. Not counted: $9M UK Innovation Accelerators; GBP 20M state package 2026; reported Series B extension"},
+   sources: ["https://www.businesswire.com/news/home/20230802317135/en/", "https://www.businesswire.com/news/home/20251021496528/en/"]}
 - {id: dunia, name: Dunia Innovations, type: company, watch: no-result}
 - {id: altrove, name: Altrove, type: company, watch: no-result}
 - {id: discovered-materials, name: Discovered Materials, type: company, watch: no-result}

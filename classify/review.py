@@ -194,7 +194,7 @@ def main():
     sub = ap.add_subparsers(dest="cmd", required=True)
     p = sub.add_parser("list")
     p.add_argument("--org")
-    p.add_argument("--source", choices=["news", "sec", "paper", "crossref"])
+    p.add_argument("--source", choices=["news", "sec", "paper", "crossref", "award"])
     p.add_argument("--limit", type=int, default=40)
     p.add_argument("--members", type=int, default=3)
     p = sub.add_parser("accept")

@@ -8,7 +8,7 @@ from datetime import date
 import pytest
 
 from classify import accept, events, review
-from ingest import common, news, openalex
+from ingest import awards, common, financials, news, openalex, patents
 from tracker import registry
 
 SIGNALS = common.signals()
@@ -32,7 +32,11 @@ def test_news_terms_are_quoted_phrases(oid):
 @pytest.mark.parametrize("oid", list(SIGNALS))
 def test_signal_fields(oid):
     s = SIGNALS[oid]
-    assert set(s) <= {"domains", "news", "newsroom_feed", "cik", "openalex", "verify"}, set(s)
+    assert set(s) <= {"domains", "news", "newsroom_feed", "cik", "openalex", "patents", "awards", "verify"}, set(s)
+    for key in ("patents", "awards"):
+        if key in s and s[key] is not False:
+            assert set(s[key]) <= {"query", "match"} and s[key].get("query"), (key, s[key])
+            assert ORGS[oid]["type"] == "company", f"{key} are fetched for companies only"
     if "cik" in s:
         assert isinstance(s["cik"], str) and s["cik"].isdigit()
     if feed := s.get("newsroom_feed"):
@@ -186,3 +190,134 @@ def test_news_collisions(oid, title, keep):
 def test_org_level_accept_drops_material():
     assert set(events.LEDGER) == {"funding", "valuation", "listing", "acquisition", "status"}
     assert review.ORG_LEVEL is events.LEDGER
+
+
+# ---------------------------------------------------------------- Phase 3: patents, federal awards, financials
+
+def _patent(applicant, assignees=(), pub="US20260012345A1", grant=None, cpc=("H01M 10/0567",)):
+    return {"applicationNumberText": "18000001",
+            "applicationMetaData": {"firstApplicantName": applicant, "earliestPublicationNumber": pub, "patentNumber": grant,
+                                    "cpcClassificationBag": list(cpc), "filingDate": "2025-01-02"},
+            "assignmentBag": [{"assigneeBag": [{"assigneeNameText": a} for a in assignees]}]}
+
+
+def test_patent_config_defaults_and_overrides():
+    assert patents.config("kyulux") == (["Kyulux"], ["kyulux"])
+    assert patents.config("cambium") == (["Cambium Biomaterials"], ["cambium biomaterials"])
+    names, phrases = patents.config("chemix")
+    assert names == ["Chemix Inc"] and phrases == ["chemix inc"]
+    assert "polaron" not in patents.companies() and "dp-technology" not in patents.companies()
+    assert all(ORGS[o]["type"] == "company" for o in patents.companies())
+
+
+@pytest.mark.parametrize("rec,how", [
+    (_patent("KYULUX, INC."), "applicant"),
+    (_patent("Kyushu University", ["KYULUX NORTH AMERICA, INC."]), "assignee"),
+    (_patent("USHIO CHEMIX CORP"), None),
+])
+def test_patent_matching(rec, how):
+    phrases = ["kyulux"] if how else ["chemix inc"]
+    assert not common.names_match("Radical Air Heating LLC", ["radical ai"])
+    assert common.names_match("SCHRODINGER, INC.", ["schrodinger, inc"])
+    assert patents.matches(rec, phrases) == how
+
+
+def test_patent_public_and_scope():
+    assert patents.public(_patent("X")) and patents.public(_patent("X", pub=None, grant="12000000"))
+    assert not patents.public(_patent("X", pub=None))
+    assert patents.in_scope(["H01M10/0567"]) and patents.in_scope(["C08L67/04"])
+    assert not patents.in_scope(["G06N20/00"])
+    r = patents.row("kyulux", _patent("KYULUX, INC.", cpc=("G06N 20/00", "C09K 11/06")), "applicant")
+    assert r["in_scope"] == "1" and r["cpc"] == "G06N20/00 C09K11/06" and set(r) == set(patents.COLUMNS)
+
+
+class _Resp:
+    def __init__(self, status, body=None):
+        self.status_code, self.ok, self._body = status, status < 400, body or {}
+
+    def json(self):
+        return self._body
+
+
+def test_patent_search_pages_and_shrinks_on_413(monkeypatch):
+    calls = []
+    pages = iter([_Resp(413), _Resp(200, {"count": 3, "patentFileWrapperDataBag": [1, 2]}),
+                  _Resp(200, {"count": 3, "patentFileWrapperDataBag": [3]})])
+
+    def get(url, headers, params, timeout):
+        calls.append(params["limit"])
+        return next(pages)
+    monkeypatch.setattr(patents.requests, "get", get)
+    monkeypatch.setattr(patents, "headers", lambda: {})
+    monkeypatch.setattr(patents, "PACE", 0)
+    assert patents.search("q") == [1, 2, 3]
+    assert calls == [100, 25, 25]
+
+
+def test_patent_search_404_is_empty_and_other_errors_raise(monkeypatch):
+    monkeypatch.setattr(patents, "headers", lambda: {})
+    monkeypatch.setattr(patents, "PACE", 0)
+    monkeypatch.setattr(patents.requests, "get", lambda *a, **k: _Resp(404))
+    assert patents.search("q") == []
+    monkeypatch.setattr(patents.requests, "get", lambda *a, **k: _Resp(500))
+    with pytest.raises(RuntimeError, match="USPTO ODP 500"):
+        patents.search("q")
+
+
+def test_award_config():
+    assert awards.config("mitra-chem") == (["Mitra Future Technologies"], ["mitra future technologies"])
+    assert awards.config("schrodinger") is None          # awards: false
+    assert awards.config("polaron") is None              # patents: false and no awards entry
+    assert awards.config("radical-ai") == (["Radical AI"], ["radical ai"])
+    assert "schrodinger" not in awards.companies()
+
+
+def _award(**kw):
+    a = {"generated_internal_id": "CONT_AWD_X_9700", "Award ID": "X", "Recipient Name": "RADICAL AI, INC",
+         "Award Amount": 1197902.0, "Awarding Agency": "Department of Defense", "Awarding Sub Agency": "Department of the Air Force",
+         "Description": "SBIR PHASE I:  AUTONOMOUS\nEXPERIMENTATION", "Start Date": "2025-05-23", "End Date": "2026-05-23"}
+    return a | kw
+
+
+def test_award_row_and_queue_item():
+    r = awards.row("radical-ai", _award(), "contract")
+    assert set(r) == set(awards.COLUMNS) and r["sbir"] == "1" and r["amount_usd"] == "1197902"
+    assert r["description"] == "SBIR PHASE I: AUTONOMOUS EXPERIMENTATION"
+    assert r["url"] == "https://www.usaspending.gov/award/CONT_AWD_X_9700"
+    q = awards.queue_item(r)
+    assert set(q) == set(common.QUEUE_COLUMNS) and q["qid"] == "award:CONT_AWD_X_9700"
+    assert q["suggested_type"] == "award" and q["material"] == "" and q["status"] == "open"
+    assert "SBIR/STTR contract $1.2M" in q["title"]
+    assert json.loads(q["parsed"])["amounts"] == [1197902]
+    assert common.tier_of(q["url"]) == "tier1"
+
+
+def test_award_fetch_keeps_only_matching_recipients(monkeypatch):
+    monkeypatch.setattr(awards, "search", lambda name, codes: [_award(), _award(**{
+        "generated_internal_id": "Y", "Recipient Name": "RADICAL AIR HEATING LLC"})])
+    got = awards.fetch("radical-ai")
+    assert [r["internal_id"] for r in got] == ["CONT_AWD_X_9700"] and got[0]["category"] == "contract"
+
+
+def test_awards_first_run_queues_material_orgs_only(tmp_path, monkeypatch):
+    monkeypatch.setattr(awards, "OUT", tmp_path / "awards.csv")
+    monkeypatch.setattr(awards, "write_snapshot", lambda *a: None)
+    store = {"queue": []}
+    monkeypatch.setattr(awards, "read_queue", lambda: list(store["queue"]))
+    monkeypatch.setattr(awards, "write_queue", lambda rows: store.update(queue=rows))
+    monkeypatch.setattr(awards, "fetch", lambda oid: [awards.row(oid, _award(generated_internal_id=f"A-{oid}"), "grant")])
+    awards.main(["radical-ai", "questek"])
+    assert [q["org"] for q in store["queue"]] == ["radical-ai"]   # questek is watch list: recorded, not queued
+    assert {r["org"] for r in awards.read()} == {"radical-ai", "questek"}
+    monkeypatch.setattr(awards, "fetch", lambda oid: [awards.row(oid, _award(generated_internal_id=f"B-{oid}"), "grant")])
+    awards.main(["questek"])                                    # later runs queue new awards for every company
+    assert [q["qid"] for q in store["queue"]] == ["award:A-radical-ai", "award:B-questek"]
+
+
+def test_financials_scope():
+    c = financials.load_companies()
+    assert set(c) == {"ses-ai", "schrodinger"}
+    assert c["ses-ai"]["cik"] == 1819142 and all(financials.in_scope(v) for v in c.values())
+    assert financials.shell_cutoff({"name": "SES AI Corp", "formerNames": [
+        {"name": "Ivanhoe Capital Acquisition Corp.", "to": "2022-02-04T00:00:00.000Z"}]}) == "2022-02-04"
+    assert financials.shell_cutoff({"name": "Ivanhoe Capital Acquisition Corp."}) is None

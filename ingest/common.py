@@ -7,6 +7,7 @@ IDs) from reference/signals.yaml, so the hand-curated registry stays free of fet
 import csv
 import json
 import os
+import re
 import subprocess
 from datetime import date
 from functools import cache
@@ -83,6 +84,12 @@ def write_queue(rows):
         w = csv.DictWriter(fh, QUEUE_COLUMNS)
         w.writeheader()
         w.writerows(sorted(rows, key=lambda q: (q["status"] != "open", q["date"], q["org"], q["qid"])))
+
+
+def names_match(text, phrases):
+    """True when a whole-word phrase occurs in text, case-insensitive ("radical ai" is not in "Radical Air Heating")."""
+    t = (text or "").lower()
+    return any(re.search(rf"(?<![a-z0-9]){re.escape(p)}(?![a-z0-9])", t) for p in phrases)
 
 
 def domain_of(url):

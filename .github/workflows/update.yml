@@ -1,8 +1,10 @@
 name: update
-# Weekly (plan 2026-11-19): SEC filings -> news -> acceptance rules -> OpenAlex papers, journal versions, critiques
-# -> Crossref corrections -> test -> commit data. Patents are quarterly (Phase 3). No job boards.
+# Weekly (plan 2026-11-19): SEC filings -> federal awards -> public-company financials -> news -> acceptance rules
+# -> OpenAlex papers, journal versions, critiques -> Crossref corrections -> patents (quarterly: --if-due skips until the
+# last full run is 85 days old) -> test -> commit data. No job boards.
 # Scheduled runs need repo variable SCHEDULE_ON=true. Not live: the repo has no remote until Josh approves.
-# Secrets: CONTACT_EMAIL (SEC User-Agent, OpenAlex and Crossref polite pools), OPENALEX_API_KEY. Never written to the repo.
+# Secrets: CONTACT_EMAIL (SEC User-Agent, OpenAlex and Crossref polite pools), OPENALEX_API_KEY, USPTO_ODP_API_KEY.
+# Never written to the repo.
 on:
   schedule:
     - cron: "30 11 * * 1"   # Mondays 06:30 ET (EST)
@@ -29,11 +31,16 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       CONTACT_EMAIL: ${{ secrets.CONTACT_EMAIL }}
       OPENALEX_API_KEY: ${{ secrets.OPENALEX_API_KEY }}
+      USPTO_ODP_API_KEY: ${{ secrets.USPTO_ODP_API_KEY }}
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
       - name: SEC filings
         run: uv run python -m ingest.filings --since "$(date -u -d '21 days ago' +%F)"
+      - name: Federal awards (USAspending)
+        run: uv run python -m ingest.awards
+      - name: Public-company financials (EDGAR XBRL)
+        run: uv run python -m ingest.financials
       - name: News
         run: uv run python -m ingest.news --sources bing,gnews,newsroom --days "${{ inputs.news_days || '8' }}"
       - name: Acceptance rules
@@ -42,13 +49,15 @@ jobs:
         run: uv run python -m ingest.openalex --since "$(date -u -d '28 days ago' +%F)"
       - name: Crossref corrections
         run: uv run python -m ingest.crossref
+      - name: Patents (quarterly)
+        run: uv run python -m ingest.patents --if-due
       - name: Test
         run: uv run pytest -q
       - name: Commit data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
-          git add data/news data/review data/papers reference/ledger.csv
+          git add data/news data/review data/papers data/awards data/patents data/public reference/ledger.csv
           if git diff --cached --quiet; then echo "No data changes"; exit 0; fi
           git commit -m "Data update $(date -u +%F)"
           git pull --rebase

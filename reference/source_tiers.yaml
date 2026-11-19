@@ -13,14 +13,15 @@
 tier1:
   wires: [businesswire.com, globenewswire.com, prnewswire.com, prnewswire.co.uk, accesswire.com, webwire.com]
   filings: [sec.gov]
-  government: [ca.gov, maryland.gov, masstech.org, texas.gov, darpa.mil, arpa-h.gov, fda.gov, energy.gov]
+  government: [ca.gov, maryland.gov, masstech.org, texas.gov, darpa.mil, arpa-h.gov, fda.gov, energy.gov, usaspending.gov, sbir.gov]
   university: [cmu.edu, mit.edu, utoronto.ca, liverpool.ac.uk, ncsu.edu, harvard.edu, purdue.edu, ethz.ch, berkeley.edu,
                eurekalert.org]   # eurekalert hosts institutions' own releases
   national_labs: [pnnl.gov, anl.gov, lbl.gov, llnl.gov, ornl.gov, nrel.gov, nist.gov, osti.gov, nasa.gov]
   corporate_labs: [microsoft.com, deepmind.google, blog.google, ai.meta.com, about.fb.com, samsung.com]
   ir_hosting: [q4cdn.com]   # investor-relations document host (Ginkgo's Novo release)
   outlets: [reuters.com, bloomberg.com, wsj.com, ft.com, nytimes.com, apnews.com, cnbc.com, axios.com,
-            theinformation.com, techcrunch.com, bostonglobe.com, therobotreport.com]
+            theinformation.com, techcrunch.com, bostonglobe.com, therobotreport.com,
+            sifted.eu]   # sifted promoted 2026-11-19 (funding-figures review)
 
 tier2: [azom.com, betakit.com, finchannel.com, freepressjournal.in, wsgr.com, cen.acs.org, chemistryworld.com, phys.org, sciencedaily.com, materialstoday.com, compositesworld.com,
         hydrocarbonprocessing.com, worldfertilizer.com, electrive.com, batterytechonline.com, chemanalyst.com,
@@ -36,7 +37,7 @@ tier2: [azom.com, betakit.com, finchannel.com, freepressjournal.in, wsgr.com, ce
         manufacturing.net, maritime-executive.com, marketbeat.com, marketwatch.com, massrobotics.org, mediapost.com,
         medicaldevice-network.com, mmh.com, mobihealthnews.com, nasdaq.com, navalnews.com, news.usni.org, optics.org,
         pharmaphorum.com, pocketgamer.biz, pulse2.com, qz.com, robotics247.com, roboticsandautomationnews.com,
-        rutlandherald.com, sacbee.com, scmp.com, sifted.eu, siliconangle.com, spectrum.ieee.org, statnews.com,
+        rutlandherald.com, sacbee.com, scmp.com, siliconangle.com, spectrum.ieee.org, statnews.com,
         streetinsider.com, supplychain247.com, tech.eu, tech.yahoo.com, technode.com, techradar.com, techrepublic.com,
         techspot.com, thenextweb.com, thepharmaletter.com, theprint.in, theregister.com, thestar.com.my, theverge.com,
         truckinginfo.com, trucknews.com, ttnews.com, venturebeat.com, washingtontechnology.com, wired.com, wwd.com,
